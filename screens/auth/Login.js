@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Button, Divider, FormControl, Heading, Input, Text, WarningOutlineIcon} from "native-base";
 import {Image, Pressable, ScrollView, View} from "react-native";
-import {signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from "../../config/firebase";
 import {isEmailValid} from "../../utils/functions";
 import facebook from "../../assets/facebook-icon.png";

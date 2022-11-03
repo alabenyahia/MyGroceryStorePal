@@ -1,18 +1,19 @@
 import React from 'react';
-import {Text, View} from "react-native";
+import {ScrollView, Text, View} from "react-native";
 import { useAuthentication } from '../utils/hooks/useAuthentication';
 import {auth} from "../config/firebase";
 import {Button} from "native-base";
 import { signOut } from "firebase/auth";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 const Home = () => {
     const { user } = useAuthentication();
     return (
-        <View>
-            <Text>Welcome {user?.email}!</Text>
+        <SafeAreaView>
+            <ScrollView>
 
-            <Button title="Sign Out" onPress={() => signOut(auth)} />
-        </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
