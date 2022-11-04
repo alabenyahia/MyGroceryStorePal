@@ -7,7 +7,7 @@ import {AntDesign} from "@expo/vector-icons";
 
 const Sellings = () => {
     return (
-        <SafeAreaView>
+        <SafeAreaView >
             <ScrollView>
                 <View style={{marginBottom: 32, padding: 16, paddingBottom: 0}}>
                     <Text bold style={{textAlign: "center"}}>Today</Text>

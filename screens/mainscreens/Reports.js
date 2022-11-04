@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, Text} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Box, Button, Divider, FlatList} from "native-base"
+import {Box, Button, Divider} from "native-base"
 
 const Reports = () => {
     return (

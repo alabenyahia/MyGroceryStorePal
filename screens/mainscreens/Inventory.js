@@ -2,14 +2,12 @@ import React from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Image, Pressable, ScrollView, View} from "react-native";
 import {Button, Divider, Fab, Icon, Text} from "native-base";
-import InventoryIcon from "../../assets/icons/inventory.png";
-import SellingsIcon from "../../assets/icons/sellings.png";
 import KitkatImg from "../../assets/kitkat.png";
 import {AntDesign} from "@expo/vector-icons";
 
 const Inventory = () => {
     return (
-        <SafeAreaView>
+        <SafeAreaView >
             <ScrollView>
                 <View style={{marginBottom: 32, padding: 16, paddingBottom: 0}}>
                     <Text bold style={{textAlign: "center"}}>Today</Text>
