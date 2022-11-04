@@ -192,6 +192,7 @@ const Home = ({navigation}) => {
                     </Pressable>
                 </View>
 
+                <View style={{marginTop: 24}}></View>
 
             </ScrollView>
         </SafeAreaView>

@@ -9,13 +9,15 @@ import Reports from "../screens/mainscreens/Reports";
 import Stores from "../screens/mainscreens/Stores";
 import Tutorial from "../screens/mainscreens/Tutorial";
 import Settings from "../screens/mainscreens/Settings";
+import CustomDrawerContent from "../components/customDrawerContent";
 
 const Drawer = createDrawerNavigator();
 
 export default function UserDrawer() {
     return (
         <NavigationContainer independent={true} >
-            <Drawer.Navigator initialRouteName="Home" screenOptions={{headerStyle: {backgroundColor: '#F16B44'}, headerTintColor: '#dcdcdc'}}>
+            <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} />}
+                              screenOptions={{headerStyle: {backgroundColor: '#F16B44'}, headerTintColor: '#dcdcdc'}}>
                 <Drawer.Screen name="Home" component={Home}/>
                 <Drawer.Screen name="Inventory" component={Inventory}/>
                 <Drawer.Screen name="Sellings" component={Sellings}/>
