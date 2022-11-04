@@ -12,7 +12,7 @@ import StoresIcon from "../assets/icons/stores.png";
 import TutorialIcon from "../assets/icons/tutorial.png";
 import SettingsIcon from "../assets/icons/settings.png";
 
-const Home = () => {
+const Home = ({navigation}) => {
     const {user} = useAuthentication();
     return (
         <SafeAreaView>
@@ -45,7 +45,7 @@ const Home = () => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }}>
+                    }} onPress={() => navigation.navigate("Inventory")}>
                         <View>
                             <View>
                                 <Image source={InventoryIcon}
@@ -72,7 +72,7 @@ const Home = () => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }}>
+                    }} onPress={() => navigation.navigate("Sellings")}>
                         <View>
                             <View>
                                 <Image source={SellingsIcon}
@@ -98,7 +98,7 @@ const Home = () => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }}>
+                    }} onPress={() => navigation.navigate("Reports")}>
                         <View>
                             <View>
                                 <Image source={ReportsIcon}
@@ -128,7 +128,7 @@ const Home = () => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }}>
+                    }} onPress={() => navigation.navigate("Stores")}>
                         <View>
                             <View>
                                 <Image source={StoresIcon}
@@ -155,7 +155,7 @@ const Home = () => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }}>
+                    }} onPress={() => navigation.navigate("Tutorial")}>
                         <View>
                             <View>
                                 <Image source={TutorialIcon}
@@ -181,7 +181,7 @@ const Home = () => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }}>
+                    }} onPress={() => navigation.navigate("Settings")}>
                         <View>
                             <View>
                                 <Image source={SettingsIcon}
