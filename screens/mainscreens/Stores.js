@@ -5,7 +5,7 @@ import {AntDesign} from "@expo/vector-icons";
 import {FlatList} from "native-base"
 import {Pressable} from "react-native";
 
-const Stores = () => {
+const Stores = ({navigation}) => {
 
     const data = [
         {id: 1, storeName: "Ala's store"},
@@ -22,7 +22,7 @@ const Stores = () => {
                         {item.storeName}
                     </Text>
 
-                    <Pressable style={{paddingHorizontal: 6}}><Text style={{fontWeight: "bold", color: "#F16B44"}}>Edit</Text></Pressable>
+                    <Pressable style={{paddingHorizontal: 6}} onPress={() => navigation.navigate("EditStore", {id: id})}><Text style={{fontWeight: "bold", color: "#F16B44"}}>Edit</Text></Pressable>
                 </Box>} keyExtractor={item => item.id}/>
             </Box>
 
