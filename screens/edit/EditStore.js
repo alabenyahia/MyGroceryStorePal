@@ -1,7 +1,7 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {Pressable, ScrollView, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, Divider, Icon, Input, Text} from "native-base";
+import {Divider, Icon, Input, Text} from "native-base";
 import ColorPicker from "react-native-wheel-color-picker";
 import {AntDesign} from "@expo/vector-icons";
 
