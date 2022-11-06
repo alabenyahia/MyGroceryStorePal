@@ -4,26 +4,26 @@ import {Image, Pressable, ScrollView, View} from "react-native";
 import {Button, Divider, Fab, Icon, Text} from "native-base";
 import {AntDesign} from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { getDatabase, ref, onValue} from "firebase/database";
+import {getDatabase, ref, onValue} from "firebase/database";
+import {useAuthentication} from "../../utils/hooks/useAuthentication";
 
 
-
-const Inventory = () => {
+const Inventory = ({navigation}) => {
     const [date, setDate] = useState(new Date())
     const [dateText, setDateText] = useState("")
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [inventoryProducts, setInventoryProducts] = useState([])
-
+    const {user} = useAuthentication();
 
     useEffect(() => {
         const dt = new Date()
         if (dt.getDate() === date.getDate() && dt.getMonth() === date.getMonth() && dt.getFullYear() === date.getFullYear()) {
             setDateText("Today")
-        }
-        else {
+        } else {
             setDateText(date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
                 '-' + (date.getFullYear()).toString())
         }
+        console.log(user)
     }, [date]);
 
 
@@ -33,7 +33,7 @@ const Inventory = () => {
         const dt = date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
             '-' + (date.getFullYear()).toString()
         console.log(dt)
-        const productsRef = ref(db, 'inventory/' + dt + '/products');
+        const productsRef = ref(db, user?.uid +'/inventory/' + dt + '/products');
         onValue(productsRef, (snapshot) => {
             const data = snapshot.val();
             setInventoryProducts(data)
@@ -45,13 +45,13 @@ const Inventory = () => {
             return (
                 <Text style={{padding: 16, color: "#cc0000"}}>
                     {dateText} Inventory is still empty, please add more products.
-            </Text>
+                </Text>
             )
         }
         let counter = 0
         const all = []
         let part = []
-        for (let i=0; i < inventoryProducts.length; i++) {
+        for (let i = 0; i < inventoryProducts.length; i++) {
 
             if (counter > 2) {
                 all.push(part)
@@ -86,7 +86,7 @@ const Inventory = () => {
                 </Pressable>
             )
 
-            if (i === inventoryProducts.length -1 ) {
+            if (i === inventoryProducts.length - 1) {
                 all.push(part)
             }
             counter++
@@ -95,7 +95,13 @@ const Inventory = () => {
         return all.map(productsRow => {
             return (
                 <>
-                    <View style={{flexDirection: "row", justifyContent: "center", padding: 16, paddingTop: 0, paddingBottom: 0}}>
+                    <View style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        padding: 16,
+                        paddingTop: 0,
+                        paddingBottom: 0
+                    }}>
                         {productsRow}
                     </View>
 
@@ -128,7 +134,9 @@ const Inventory = () => {
 
                 {renderProducts()}
 
-                <Fab renderInPortal={false} shadow={3} size="md" icon={<Icon color="white" as={AntDesign} name="plus" size="sm" />} />
+                <Fab onPress={() => navigation.navigate("AddProductToInventory")} renderInPortal={false} shadow={3}
+                     size="md" icon={<Icon color="white" as={AntDesign} name="plus" size="sm"/>}/>
+
 
             </ScrollView>
         </SafeAreaView>

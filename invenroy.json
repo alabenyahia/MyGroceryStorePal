@@ -1,100 +1,106 @@
 {
-  "inventory": {
-    "03-11-2022": {
-      "products": [{
-        "name": "pistache",
-        "quantity": 19,
-        "price": 3,
-        "unity": "100g",
-        "img": "https://www.kitkatarabia.com/sites/default/files/2022-04/KITKAT%C2%AE%204%20Finger%20Milk%20Chocolate%20Bar%20_Desktop-428x428px.png",
-        "category": "chocolat"
+  "XjfD27RXI1R7kEBZoaecPV8PtrD3": {
+    "inventory": {
+      "03-11-2022": {
+        "products": [
+          {
+            "name": "pistache",
+            "quantity": 19,
+            "price": 3,
+            "unity": "100g",
+            "img": "https://www.kitkatarabia.com/sites/default/files/2022-04/KITKAT%C2%AE%204%20Finger%20Milk%20Chocolate%20Bar%20_Desktop-428x428px.png",
+            "category": "chocolat"
+          },
+          {
+            "name": "jus",
+            "quantity": 26,
+            "price": 0.8,
+            "unity": 1,
+            "img": "https://hips.hearstapps.com/hmg-prod/images/full-frame-shot-of-raw-almonds-royalty-free-image-683814187-1537885519.jpg?crop=0.66635xw:1xh;center,top&resize=1200:*",
+            "category": "fakia"
+          },
+          {
+            "name": "Milk",
+            "quantity": 130,
+            "price": 1.150,
+            "unity": 1,
+            "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
+            "category": "daily"
+          }
+        ]
       },
-        {
-          "name": "jus",
-          "quantity": 26,
-          "price": 0.8,
-          "unity": 1,
-          "img": "https://hips.hearstapps.com/hmg-prod/images/full-frame-shot-of-raw-almonds-royalty-free-image-683814187-1537885519.jpg?crop=0.66635xw:1xh;center,top&resize=1200:*",
-          "category": "fakia"
-        },
-        {
-          "name": "Milk",
-          "quantity": 130,
-          "price": 1.150,
-          "unity": 1,
-          "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
-          "category": "daily"
-        }]
-    },
-
-    "04-11-2022": {
-      "products": [{
-        "name": "7oms",
-        "quantity": 12,
-        "price": 1.5,
-        "unity": 1,
-        "img": "https://www.kitkatarabia.com/sites/default/files/2022-04/KITKAT%C2%AE%204%20Finger%20Milk%20Chocolate%20Bar%20_Desktop-428x428px.png",
-        "category": "chocolat"
+      "04-11-2022": {
+        "products": [
+          {
+            "name": "7oms",
+            "quantity": 12,
+            "price": 1.5,
+            "unity": 1,
+            "img": "https://www.kitkatarabia.com/sites/default/files/2022-04/KITKAT%C2%AE%204%20Finger%20Milk%20Chocolate%20Bar%20_Desktop-428x428px.png",
+            "category": "chocolat"
+          },
+          {
+            "name": "choufen",
+            "quantity": 26,
+            "price": 3.5,
+            "unity": "100g",
+            "img": "https://hips.hearstapps.com/hmg-prod/images/full-frame-shot-of-raw-almonds-royalty-free-image-683814187-1537885519.jpg?crop=0.66635xw:1xh;center,top&resize=1200:*",
+            "category": "fakia"
+          },
+          {
+            "name": "kakawia",
+            "quantity": 130,
+            "price": 1.150,
+            "unity": 1,
+            "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
+            "category": "daily"
+          },
+          {
+            "name": "kaki",
+            "quantity": 130,
+            "price": 1.150,
+            "unity": 1,
+            "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
+            "category": "daily"
+          },
+          {
+            "name": "5obz",
+            "quantity": 130,
+            "price": 1.150,
+            "unity": 1,
+            "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
+            "category": "daily"
+          }
+        ]
       },
-        {
-          "name": "choufen",
-          "quantity": 26,
-          "price": 3.5,
-          "unity": "100g",
-          "img": "https://hips.hearstapps.com/hmg-prod/images/full-frame-shot-of-raw-almonds-royalty-free-image-683814187-1537885519.jpg?crop=0.66635xw:1xh;center,top&resize=1200:*",
-          "category": "fakia"
-        },
-        {
-          "name": "kakawia",
-          "quantity": 130,
-          "price": 1.150,
-          "unity": 1,
-          "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
-          "category": "daily"
-        },
-        {
-          "name": "kaki",
-          "quantity": 130,
-          "price": 1.150,
-          "unity": 1,
-          "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
-          "category": "daily"
-        },
-        {
-          "name": "5obz",
-          "quantity": 130,
-          "price": 1.150,
-          "unity": 1,
-          "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
-          "category": "daily"
-        }]
-    },
-
-    "05-11-2022": {
-      "products": [{
-        "name": "Kitkat",
-        "quantity": 12,
-        "price": 1.5,
-        "unity": 1,
-        "img": "https://www.kitkatarabia.com/sites/default/files/2022-04/KITKAT%C2%AE%204%20Finger%20Milk%20Chocolate%20Bar%20_Desktop-428x428px.png",
-        "category": "chocolat"
-      },
-        {
-          "name": "Almond",
-          "quantity": 26,
-          "price": 3.5,
-          "unity": "100g",
-          "img": "https://hips.hearstapps.com/hmg-prod/images/full-frame-shot-of-raw-almonds-royalty-free-image-683814187-1537885519.jpg?crop=0.66635xw:1xh;center,top&resize=1200:*",
-          "category": "fakia"
-        },
-        {
-          "name": "Milk",
-          "quantity": 130,
-          "price": 1.150,
-          "unity": 1,
-          "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
-          "category": "daily"
-        }]
+      "05-11-2022": {
+        "products": [
+          {
+            "name": "Kitkat",
+            "quantity": 12,
+            "price": 1.5,
+            "unity": 1,
+            "img": "https://www.kitkatarabia.com/sites/default/files/2022-04/KITKAT%C2%AE%204%20Finger%20Milk%20Chocolate%20Bar%20_Desktop-428x428px.png",
+            "category": "chocolat"
+          },
+          {
+            "name": "Almond",
+            "quantity": 26,
+            "price": 3.5,
+            "unity": "100g",
+            "img": "https://hips.hearstapps.com/hmg-prod/images/full-frame-shot-of-raw-almonds-royalty-free-image-683814187-1537885519.jpg?crop=0.66635xw:1xh;center,top&resize=1200:*",
+            "category": "fakia"
+          },
+          {
+            "name": "Milk",
+            "quantity": 130,
+            "price": 1.150,
+            "unity": 1,
+            "img": "https://images.healthshots.com/healthshots/en/uploads/2021/11/11212048/milk-770x433.jpg",
+            "category": "daily"
+          }
+        ]
+      }
     }
   }
 }

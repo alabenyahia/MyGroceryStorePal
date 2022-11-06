@@ -41,6 +41,10 @@ const Login = () => {
             if (error.code === "auth/user-not-found") {
                 setLoginError("User not found!")
             }
+
+            if (error.code === "auth/wrong-password") {
+                setLoginError("Invalid password!")
+            }
             console.log(error.message)
         }
     }

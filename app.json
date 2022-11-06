@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you use them in the app"
+        }
+      ]
+    ],
     "name": "MyGroceryStorePal",
     "slug": "MyGroceryStorePal",
     "version": "1.0.0",

@@ -13,6 +13,7 @@ import CustomDrawerContent from "../components/customDrawerContent";
 import EditStore from "../screens/edit/EditStore";
 import {AntDesign} from "@expo/vector-icons";
 import {Button, Icon} from "native-base";
+import AddProductToInventory from "../screens/add/AddProductToInventory";
 
 const Drawer = createDrawerNavigator();
 
@@ -35,6 +36,23 @@ export default function UserDrawer() {
                     options={{
                         drawerItemStyle: { display: "none" },
                         title: "Edit Store",
+                        headerRight: () => (
+                            <Button
+                                onPress={() => console.log('This is a button!')}
+                                title="Info"
+                                color="#fff"
+                            />
+                        ),
+                        headerMode: 'float'
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="AddProductToInventory"
+                    component={AddProductToInventory}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Add Product To Inventory",
                         headerRight: () => (
                             <Button
                                 onPress={() => console.log('This is a button!')}

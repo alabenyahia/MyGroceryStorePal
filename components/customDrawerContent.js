@@ -4,6 +4,7 @@ import {DrawerContentScrollView, DrawerItem, DrawerItemList} from "@react-naviga
 
 import {signOut} from "firebase/auth";
 import {Avatar, Divider, Select} from "native-base";
+import {auth} from "../config/firebase";
 
 
 const CustomDrawerContent = (props) => {
@@ -26,7 +27,7 @@ const CustomDrawerContent = (props) => {
             <DrawerItem
                 label="Log Out"
                 labelStyle={{ color: '#cc0000'}}
-                onPress={() => { signOut() }}
+                onPress={() => { signOut(auth) }}
             />
         </DrawerContentScrollView>
     );
