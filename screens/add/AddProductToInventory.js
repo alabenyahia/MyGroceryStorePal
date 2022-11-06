@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, Text, View} from "react-native";
 
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -8,27 +8,42 @@ import * as ImagePicker from 'expo-image-picker';
 import {AntDesign} from "@expo/vector-icons";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 
-import {getDatabase, ref, set, push} from "firebase/database";
+import {getDatabase, ref, set, push, onValue} from "firebase/database";
 import {getStorage, ref as firebaseStorageRef, uploadBytes, getDownloadURL} from "firebase/storage";
-import { Buffer } from "buffer";
-import {getBlobFromUri} from "../../utils/functions";
 
 
-const AddProductToInventory = () => {
+const AddProductToInventory = ({route}) => {
     const [imageUri, setImageUri] = useState(null);
-    const [imageBytes, setImageBytes] = useState(null);
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
     const [price, setPrice] = useState("");
     const [unity, setUnity] = useState("");
     const [category, setCategory] = useState("");
+    const [categories, setCategories] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
     const [newCategoryNameError, setNewCategoryNameError] = useState("");
     const [addingProductError, setAddingProductError] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+
+    const {date} = route.params
 
 
     const {user} = useAuthentication();
+
+    useEffect(() => {
+        const db = getDatabase();
+        const categoriesRef = ref(db, user?.uid +'/categories');
+        onValue(categoriesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                let output = Object.entries(data).map(([value, label]) => ({value, label}));
+                console.log("categories", output)
+                setCategories(output)
+            }
+        });
+    }, []);
+
 
     const pickImage = async () => {
 
@@ -43,13 +58,12 @@ const AddProductToInventory = () => {
 
         if (!result.cancelled) {
             setImageUri(result.uri);
-            const  imageByte = new Buffer(result.base64, "base64")
-            setImageBytes(imageByte.data)
         }
     };
 
     function addCategory() {
         setNewCategoryNameError("")
+        setSuccessMsg("")
         if (newCategoryName.length > 0) {
             const db = getDatabase();
             const postListRef = ref(db, user?.uid + '/categories');
@@ -57,12 +71,20 @@ const AddProductToInventory = () => {
             set(newPostRef, newCategoryName)
 
             setNewCategoryName("")
+            setModalVisible(false)
         } else {
             setNewCategoryNameError("Name shouldn't be empty")
         }
     }
 
-    const uploadImage = async () => {
+    async function addProduct() {
+        setAddingProductError("")
+
+        if (name.length === 0 || !imageUri || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || !imageUri) {
+            setAddingProductError("Fill up all the data first!")
+            return
+        }
+
         const imgName = "img-" + new Date().getTime();
         const storage = getStorage();
 
@@ -70,26 +92,35 @@ const AddProductToInventory = () => {
             const response = await fetch(imageUri)
             const blobFile = await response.blob()
 
-            const reference = firebaseStorageRef(storage, `${imgName}.jpg`)
+            const reference = firebaseStorageRef(storage, `${user?.uid}/${imgName}.jpg`)
             const result = await uploadBytes(reference, blobFile)
-            const url = await getDownloadURL(result.ref)
+            const imgUrl = await getDownloadURL(result.ref)
 
-            return url
+            const db = getDatabase();
+            const productsRef = ref(db, `${user?.uid}/inventory/${date}/products`);
+            const newProductRef = push(productsRef);
+            await set(newProductRef, {
+                name: name,
+                quantity: parseFloat(quantity),
+                price: parseFloat(price),
+                unity: unity,
+                category: category,
+                image: imgUrl
+            });
+
+            setSuccessMsg("Product added successfully!")
+
         } catch (err) {
             return Promise.reject(err)
         }
 
-    };
-
-    function addProduct() {
-        setAddingProductError("")
-
-        const uploadedImgUrl = uploadImage(getBlobFromUri(imageUri))
     }
 
     return (
         <SafeAreaView style={{padding: 16}}>
             <ScrollView>
+                {addingProductError && <Text style={{marginBottom: 12, textAlign: "center", color: "#cc0000"}}>{addingProductError}</Text>}
+                {successMsg && <Text style={{marginBottom: 12, textAlign: "center", color: "#22bb33"}}>{successMsg}</Text>}
                 <Input placeholder="Product name" mb={4} value={name} onChangeText={(value) => {
                     setName(value)
                 }}/>
@@ -107,8 +138,7 @@ const AddProductToInventory = () => {
                     <View style={{flex: 2, marginRight: 12}}>
                         <Select selectedValue={category} placeholder="Category"
                                 onValueChange={itemValue => setCategory(itemValue)} mb={4}>
-                            <Select.Item label="UX Research" value="ux"/>
-                            <Select.Item label="Web Development" value="web"/>
+                            {categories.map(category => <Select.Item label={category.label} value={category.value} key={category.value}/>)}
                         </Select>
                     </View>
 

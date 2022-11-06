@@ -134,7 +134,7 @@ const Inventory = ({navigation}) => {
 
                 {renderProducts()}
 
-                <Fab onPress={() => navigation.navigate("AddProductToInventory")} renderInPortal={false} shadow={3}
+                <Fab onPress={() => navigation.navigate("AddProductToInventory", {date: dateText})} renderInPortal={false} shadow={3}
                      size="md" icon={<Icon color="white" as={AntDesign} name="plus" size="sm"/>}/>
 
 
