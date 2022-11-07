@@ -85,22 +85,6 @@ const Login = () => {
 
                 <Button mt={6} onPress={() => login()}>LOGIN</Button>
 
-                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 56, marginBottom: 40}}>
-                    <Divider style={{width: "30%"}}/>
-                    <Text style={{marginHorizontal: 12, color: "#9CA3AF"}}>or</Text>
-                    <Divider style={{width: "30%"}}/>
-                </View>
-
-                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-                    <Pressable>
-                        <Image source={facebook}
-                               style={{width: 32, height: 32, alignSelf: 'center', marginRight: 16}}/>
-                    </Pressable>
-                    <Pressable>
-                        <Image source={google}
-                               style={{width: 32, height: 32, alignSelf: 'center'}}/>
-                    </Pressable>
-                </View>
             </ScrollView>
         </SafeAreaView>
     );

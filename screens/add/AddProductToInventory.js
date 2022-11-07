@@ -80,6 +80,7 @@ const AddProductToInventory = ({route}) => {
 
     async function addProduct() {
         setAddingProductError("")
+        setSuccessMsg("")
 
         if (name.length === 0 || !imageUri || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || !imageUri) {
             setAddingProductError("Fill up all the data first!")
@@ -114,6 +115,13 @@ const AddProductToInventory = ({route}) => {
         } catch (err) {
             return Promise.reject(err)
         }
+
+        setName("")
+        setQuantity("")
+        setPrice("")
+        setUnity("")
+        setCategory("")
+        setImageUri(null)
 
     }
 

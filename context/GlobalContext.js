@@ -18,6 +18,7 @@ export const GlobalProvider = ({children}) => {
                 const data = snapshot.val();
                 if (data) {
                     let output = Object.entries(data).map(([key, value]) => ({key, value}));
+
                     setStores(output)
                 }
                 console.log("stores", data)

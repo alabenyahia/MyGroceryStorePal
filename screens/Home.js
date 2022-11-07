@@ -14,9 +14,6 @@ import GlobalContext from "../context/GlobalContext";
 const Home = ({navigation}) => {
     const {user} = useAuthentication();
     const {selectedStore, stores} = useContext(GlobalContext)
-    if (stores.length === 0) {
-        navigation.navigate('Tutorial')
-    }
     return (
         <SafeAreaView>
             <ScrollView>
@@ -38,8 +35,11 @@ const Home = ({navigation}) => {
 
                         elevation: 3,
                     }} onPress={() => {
-                        console.log(selectedStore)
-                        if (!selectedStore) {
+                        console.log("selectedstore", selectedStore)
+                        if (stores.length === 0) {
+                            ToastAndroid.show('Please add a store first!', ToastAndroid.SHORT);
+                        }
+                        else if (!selectedStore) {
                             ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
                         } else {
                             navigation.navigate("Inventory")
@@ -72,7 +72,10 @@ const Home = ({navigation}) => {
 
                         elevation: 3,
                     }} onPress={() => {
-                        if (!selectedStore) {
+                        if (stores.length === 0) {
+                            ToastAndroid.show('Please add a store first!', ToastAndroid.SHORT);
+                        }
+                        else if (!selectedStore) {
                             ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
                         } else {
                             navigation.navigate("Sellings")
@@ -104,7 +107,10 @@ const Home = ({navigation}) => {
 
                         elevation: 3,
                     }} onPress={() => {
-                        if (!selectedStore) {
+                        if (stores.length === 0) {
+                            ToastAndroid.show('Please add a store first!', ToastAndroid.SHORT);
+                        }
+                        else if (!selectedStore) {
                             ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
                         } else {
                             navigation.navigate("Reports")

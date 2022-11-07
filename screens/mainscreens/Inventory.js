@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Image, Pressable, ScrollView, View} from "react-native";
 import {Button, Divider, Fab, Icon, Text} from "native-base";
@@ -6,6 +6,7 @@ import {AntDesign} from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {getDatabase, ref, onValue} from "firebase/database";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
+import GlobalContext from "../../context/GlobalContext";
 
 
 const Inventory = ({navigation}) => {
@@ -14,6 +15,8 @@ const Inventory = ({navigation}) => {
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [inventoryProducts, setInventoryProducts] = useState([])
     const {user} = useAuthentication();
+
+    const {selectedStore} = useContext(GlobalContext)
 
     useEffect(() => {
         const dt = new Date()
@@ -33,14 +36,16 @@ const Inventory = ({navigation}) => {
         const dt = date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
             '-' + (date.getFullYear()).toString()
         console.log(dt)
-        const productsRef = ref(db, user?.uid +'/inventory/' + dt + '/products');
+        const productsRef = ref(db, user?.uid + '/' + selectedStore + '/inventory/' + dt + '/products');
         onValue(productsRef, (snapshot) => {
             const data = snapshot.val();
-            setInventoryProducts(data)
+            let output = Object.entries(data).map(([key, value]) => ({key, value}));
+            setInventoryProducts(output)
         });
     }, [date, user]);
 
     function renderProducts() {
+        console.log("inventory products", inventoryProducts)
         if (!inventoryProducts || inventoryProducts.length === 0) {
             return (
                 <Text style={{padding: 16, color: "#cc0000"}}>
@@ -74,14 +79,14 @@ const Inventory = ({navigation}) => {
 
                     elevation: 3,
                 }}>
-                    <Image source={{uri: inventoryProducts[i].img}}
+                    <Image source={{uri: inventoryProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>
                     <View style={{padding: 6}}>
-                        <Text>{inventoryProducts[i].name}</Text>
+                        <Text>{inventoryProducts[i].value.name}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>X{inventoryProducts[i].quantity}</Text>
+                        <Text>X{inventoryProducts[i].value.quantity}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>{inventoryProducts[i].price}TND</Text>
+                        <Text>{inventoryProducts[i].value.price}TND</Text>
                     </View>
                 </Pressable>
             )
@@ -134,7 +139,10 @@ const Inventory = ({navigation}) => {
 
                 {renderProducts()}
 
-                <Fab onPress={() => navigation.navigate("AddProductToInventory", {date: dateText})} renderInPortal={false} shadow={3}
+                <Fab onPress={() => navigation.navigate("AddProductToInventory", {
+                    date: dateText === 'Today' ? date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
+                        '-' + (date.getFullYear()).toString() : dateText
+                })} renderInPortal={false} shadow={3}
                      size="md" icon={<Icon color="white" as={AntDesign} name="plus" size="sm"/>}/>
 
 
