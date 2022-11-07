@@ -13,12 +13,13 @@ import GlobalContext from "../context/GlobalContext";
 
 const Home = ({navigation}) => {
     const {user} = useAuthentication();
-    const {selectedStore} = useContext(GlobalContext)
-
+    const {selectedStore, stores} = useContext(GlobalContext)
+    if (stores.length === 0) {
+        navigation.navigate('Tutorial')
+    }
     return (
         <SafeAreaView>
             <ScrollView>
-
                 <View style={{flexDirection: "row", justifyContent: "center", paddingHorizontal: 16, marginTop: 32}}>
                     <Pressable style={{
                         width: "30%",

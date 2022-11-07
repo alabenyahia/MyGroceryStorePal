@@ -18,7 +18,7 @@ const Tutorial = ({navigation}) => {
                 </Text>
 
                 <Text style={{marginVertical: 24, fontSize: 16, lineHeight: 24}}>
-                    - And each day before you close up your store you add all the products that you have sold to your
+                    - And each day before you close your store you add all the products that you have sold to your
                     today’s <Text style={{fontWeight: "bold", color: "#F16B44"}}
                                   onPress={() => navigation.navigate("Inventory")}>Sellings</Text>
                 </Text>
@@ -27,7 +27,7 @@ const Tutorial = ({navigation}) => {
                     - That’s it from your part, the application will do all the work for you giving you all the <Text
                     style={{fontWeight: "bold", color: "#F16B44"}}
                     onPress={() => navigation.navigate("Reports")}>Reports</Text> that
-                    you need to make your store more profitable and to allow you to monitor every single statistics of
+                    you need to make your store more profitable and to allow you to monitor every single statistic of
                     your store
                 </Text>
             </ScrollView>

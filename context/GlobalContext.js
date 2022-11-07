@@ -11,19 +11,18 @@ export const GlobalProvider = ({children}) => {
     const {user} = useAuthentication();
 
     useEffect(() => {
-        const db = getDatabase();
-        const storesRef = ref(db, user?.uid +'/stores');
-        onValue(storesRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                let output = Object.entries(data).map(([key, value]) => ({key, value}));
-                console.log("stores", output)
-                if (output.length === 1) {
-                    setSelectedStore(output[0])
+        if (user) {
+            const db = getDatabase();
+            const storesRef = ref(db, user?.uid +'/stores');
+            onValue(storesRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    let output = Object.entries(data).map(([key, value]) => ({key, value}));
+                    setStores(output)
                 }
-                setStores(output)
-            }
-        });
+                console.log("stores", data)
+            });
+        }
     }, [user]);
 
     return <GlobalContext.Provider

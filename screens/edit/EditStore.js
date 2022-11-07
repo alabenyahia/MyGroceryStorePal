@@ -9,7 +9,7 @@ import { getDatabase, ref, child, push, update } from "firebase/database";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 
 const EditStore = ({route, navigation}) => {
-    const {id} = route.params;
+    const {id, oldName} = route.params;
     const [storeName, setStoreName] = useState("")
     const [storeColor, setStoreColor] = useState("")
     const [newStoreNameError, setNewStoreNameError] = useState("")
@@ -19,14 +19,9 @@ const EditStore = ({route, navigation}) => {
     const {user} = useAuthentication();
 
     useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <Pressable style={{padding: 16, justifyContent: "center", alignItems: "center"}}
-                    onPress={() => console.log("Edit")}>
-                    <Icon color="white" as={AntDesign} name="check" size="md" />
-                </Pressable>
-            )
-        })
+        setSuccessMsg("")
+        setNewStoreNameError("")
+        setStoreName(oldName)
     }, [])
 
     function editStore() {

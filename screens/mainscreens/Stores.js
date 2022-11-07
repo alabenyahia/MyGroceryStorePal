@@ -21,7 +21,7 @@ const Stores = ({navigation}) => {
         setNewStoreNameError("")
         if (newStoreName.length > 0) {
             const db = getDatabase();
-            const storesRef = ref(db, user?.uid + '/stores');
+            const storesRef = ref(db, '/' + user?.uid + '/stores/');
             const newStoreRef = push(storesRef);
             set(newStoreRef, {name: newStoreName, color: "#F16B44"})
 
@@ -37,13 +37,13 @@ const Stores = ({navigation}) => {
             <Box>
                 {stores.length  === 0 ? <Text style={{padding: 16, textAlign: "center", color: "#cc0000"}}>You have no stores yet, please add one from the button bellow.</Text> : null}
                 <FlatList data={stores} renderItem={({item}) => <Box key={item.key}
-                    style={{flexDirection: "row", justifyContent: "space-between"}} borderBottomWidth="1"
-                    borderColor="muted.800" pl={["4", "4"]} pr={["3", "3"]} py="2">
+                                                                     style={{flexDirection: "row", justifyContent: "space-between"}} borderBottomWidth="1"
+                                                                     borderColor="muted.800" pl={["4", "4"]} pr={["3", "3"]} py="2">
                     <Text fontSize="xs" color="coolGray.800" alignSelf="flex-start">
                         {item.value.name}
                     </Text>
 
-                    <Pressable style={{paddingHorizontal: 6}} onPress={() => navigation.navigate("EditStore", {id: item.key})}><Text style={{fontWeight: "bold", color: "#F16B44"}}>Edit</Text></Pressable>
+                    <Pressable style={{paddingHorizontal: 6}} onPress={() => navigation.navigate("EditStore", {id: item.key, oldName: item.value.name})}><Text style={{fontWeight: "bold", color: "#F16B44"}}>Edit</Text></Pressable>
                 </Box>} keyExtractor={item => item.id}/>
             </Box>
 
