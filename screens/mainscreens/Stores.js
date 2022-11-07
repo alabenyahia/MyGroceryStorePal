@@ -1,38 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Box, Button, Fab, FormControl, Icon, Input, Modal, Text, WarningOutlineIcon} from "native-base";
 import {AntDesign} from "@expo/vector-icons";
 import {FlatList} from "native-base"
 import {Pressable} from "react-native";
 import {getDatabase, onValue, push, ref, set} from "firebase/database";
+import GlobalContext from "../../context/GlobalContext";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 
 const Stores = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [newStoreName, setNewStoreName] = useState("")
     const [newStoreNameError, setNewStoreNameError] = useState("")
-    const [stores, setStores] = useState([])
 
     const {user} = useAuthentication();
-
-    const data = [
-        {id: 1, storeName: "Ala's store"},
-        {id: 2, storeName: "Seif's store"},
-        {id: 3, storeName: "Atef's store"}]
-
-    useEffect(() => {
-        const db = getDatabase();
-        const storesRef = ref(db, user?.uid +'/stores');
-        onValue(storesRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                let output = Object.entries(data).map(([value, label]) => ({value, label}));
-                console.log("stores", output)
-                setStores(output)
-            }
-        });
-    }, []);
-
+    const {stores} = useContext(GlobalContext)
 
 
     function addStore() {
@@ -73,7 +55,6 @@ const Stores = ({navigation}) => {
                 <Modal.Content>
                     <Modal.CloseButton/>
                     <Modal.Body mt={10}>
-
 
                         <FormControl isInvalid={newStoreNameError.length > 0} mb={3}>
                             <FormControl.Label>Store Name</FormControl.Label>

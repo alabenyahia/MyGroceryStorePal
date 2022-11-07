@@ -3,6 +3,7 @@ import {SafeAreaProvider} from "react-native-safe-area-context";
 import {StatusBar} from "react-native";
 import {extendTheme, NativeBaseProvider} from "native-base";
 import RootNavigation from './navigation';
+import {GlobalProvider} from "./context/GlobalContext";
 
 
 export default function App() {
@@ -30,7 +31,9 @@ export default function App() {
             <NavigationContainer>
                 <SafeAreaProvider>
                     <NativeBaseProvider theme={theme}>
-                        <RootNavigation/>
+                        <GlobalProvider>
+                            <RootNavigation/>
+                        </GlobalProvider>
                     </NativeBaseProvider>
                 </SafeAreaProvider>
             </NavigationContainer>
