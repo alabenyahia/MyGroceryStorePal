@@ -38,7 +38,7 @@ const Inventory = ({navigation}) => {
             const data = snapshot.val();
             setInventoryProducts(data)
         });
-    }, [date]);
+    }, [date, user]);
 
     function renderProducts() {
         if (!inventoryProducts || inventoryProducts.length === 0) {

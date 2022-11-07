@@ -35,15 +35,7 @@ export default function UserDrawer() {
                     component={EditStore}
                     options={{
                         drawerItemStyle: { display: "none" },
-                        title: "Edit Store",
-                        headerRight: () => (
-                            <Button
-                                onPress={() => console.log('This is a button!')}
-                                title="Info"
-                                color="#fff"
-                            />
-                        ),
-                        headerMode: 'float'
+                        title: "Edit Store"
                     }}
                 />
 
@@ -53,14 +45,6 @@ export default function UserDrawer() {
                     options={{
                         drawerItemStyle: { display: "none" },
                         title: "Add Product To Inventory",
-                        headerRight: () => (
-                            <Button
-                                onPress={() => console.log('This is a button!')}
-                                title="Info"
-                                color="#fff"
-                            />
-                        ),
-                        headerMode: 'float'
                     }}
                 />
             </Drawer.Navigator>

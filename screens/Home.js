@@ -1,9 +1,7 @@
-import React from 'react';
-import {Image, Pressable, ScrollView, Text, View} from "react-native";
+import React, {useContext} from 'react';
+import {Image, Pressable, ScrollView, Text, ToastAndroid, View} from "react-native";
 import {useAuthentication} from '../utils/hooks/useAuthentication';
-import {auth} from "../config/firebase";
-import {Button, Divider, Select} from "native-base";
-import {signOut} from "firebase/auth";
+import {Divider, Select} from "native-base";
 import {SafeAreaView} from "react-native-safe-area-context";
 import InventoryIcon from "../assets/icons/inventory.png";
 import SellingsIcon from "../assets/icons/sellings.png";
@@ -11,24 +9,17 @@ import ReportsIcon from "../assets/icons/reports.png";
 import StoresIcon from "../assets/icons/stores.png";
 import TutorialIcon from "../assets/icons/tutorial.png";
 import SettingsIcon from "../assets/icons/settings.png";
+import GlobalContext from "../context/GlobalContext";
 
 const Home = ({navigation}) => {
     const {user} = useAuthentication();
+    const {selectedStore} = useContext(GlobalContext)
+
     return (
         <SafeAreaView>
             <ScrollView>
 
-                <View style={{paddingHorizontal: 16, paddingTop: 16}} >
-                    <Select placeholder="Choose a store" mb={8}>
-                        <Select.Item label="UX Research" value="ux" />
-                        <Select.Item label="Web Development" value="web" />
-                    </Select>
-                </View>
-
-
-                <Divider mb={8}/>
-
-                <View style={{flexDirection: "row", justifyContent: "center", paddingHorizontal: 16}}>
+                <View style={{flexDirection: "row", justifyContent: "center", paddingHorizontal: 16, marginTop: 32}}>
                     <Pressable style={{
                         width: "30%",
                         aspectRatio: 1,
@@ -45,7 +36,14 @@ const Home = ({navigation}) => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }} onPress={() => navigation.navigate("Inventory")}>
+                    }} onPress={() => {
+                        console.log(selectedStore)
+                        if (!selectedStore) {
+                            ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        } else {
+                            navigation.navigate("Inventory")
+                        }
+                    }}>
                         <View>
                             <View>
                                 <Image source={InventoryIcon}
@@ -72,7 +70,13 @@ const Home = ({navigation}) => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }} onPress={() => navigation.navigate("Sellings")}>
+                    }} onPress={() => {
+                        if (!selectedStore) {
+                            ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        } else {
+                            navigation.navigate("Sellings")
+                        }
+                    }}>
                         <View>
                             <View>
                                 <Image source={SellingsIcon}
@@ -98,7 +102,13 @@ const Home = ({navigation}) => {
                         shadowRadius: 2.22,
 
                         elevation: 3,
-                    }} onPress={() => navigation.navigate("Reports")}>
+                    }} onPress={() => {
+                        if (!selectedStore) {
+                            ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        } else {
+                            navigation.navigate("Reports")
+                        }
+                    }}>
                         <View>
                             <View>
                                 <Image source={ReportsIcon}

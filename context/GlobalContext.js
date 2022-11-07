@@ -16,8 +16,11 @@ export const GlobalProvider = ({children}) => {
         onValue(storesRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                let output = Object.entries(data).map(([value, label]) => ({value, label}));
+                let output = Object.entries(data).map(([key, value]) => ({key, value}));
                 console.log("stores", output)
+                if (output.length === 1) {
+                    setSelectedStore(output[0])
+                }
                 setStores(output)
             }
         });

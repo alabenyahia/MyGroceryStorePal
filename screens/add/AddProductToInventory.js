@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {Pressable, ScrollView, Text, View} from "react-native";
 
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -10,6 +10,7 @@ import {useAuthentication} from "../../utils/hooks/useAuthentication";
 
 import {getDatabase, ref, set, push, onValue} from "firebase/database";
 import {getStorage, ref as firebaseStorageRef, uploadBytes, getDownloadURL} from "firebase/storage";
+import GlobalContext from "../../context/GlobalContext";
 
 
 const AddProductToInventory = ({route}) => {
@@ -28,7 +29,7 @@ const AddProductToInventory = ({route}) => {
 
     const {date} = route.params
 
-
+    const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
 
     useEffect(() => {
@@ -42,7 +43,7 @@ const AddProductToInventory = ({route}) => {
                 setCategories(output)
             }
         });
-    }, []);
+    }, [user]);
 
 
     const pickImage = async () => {
@@ -97,7 +98,7 @@ const AddProductToInventory = ({route}) => {
             const imgUrl = await getDownloadURL(result.ref)
 
             const db = getDatabase();
-            const productsRef = ref(db, `${user?.uid}/inventory/${date}/products`);
+            const productsRef = ref(db, `${user?.uid}/${selectedStore}/inventory/${date}/products`);
             const newProductRef = push(productsRef);
             await set(newProductRef, {
                 name: name,
