@@ -85,7 +85,13 @@ const Inventory = ({navigation}) => {
                 }} onPress={() => navigation.navigate("EditProductFromInventory", {
                     id: inventoryProducts[i].key,
                     dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
-                        '-' + (date.getFullYear()).toString()
+                        '-' + (date.getFullYear()).toString(),
+                    name: inventoryProducts[i].value.name,
+                    quantity: inventoryProducts[i].value.quantity.toString(),
+                    price: inventoryProducts[i].value.price.toString(),
+                    unity: inventoryProducts[i].value.unity,
+                    category: inventoryProducts[i].value.category,
+                    image: inventoryProducts[i].value.image
                 })}>
                     <Image source={{uri: inventoryProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>

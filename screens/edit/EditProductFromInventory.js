@@ -17,12 +17,11 @@ import {AntDesign} from "@expo/vector-icons";
 import {SafeAreaView} from "react-native-safe-area-context";
 import GlobalContext from "../../context/GlobalContext";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
-import {getDatabase, onValue, push, ref, set, remove} from "firebase/database";
+import {getDatabase, onValue, push, ref, set, remove, update} from "firebase/database";
 import * as ImagePicker from "expo-image-picker";
 import {getDownloadURL, getStorage, ref as firebaseStorageRef, uploadBytes} from "firebase/storage";
 
 const EditProductFromInventory = ({route, navigation}) => {
-    const [imageUri, setImageUri] = useState(null);
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
     const [price, setPrice] = useState("");
@@ -36,10 +35,20 @@ const EditProductFromInventory = ({route, navigation}) => {
     const [successMsg, setSuccessMsg] = useState("");
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
-    const {id, dt} = route.params
+    const {id, dt, name: oldName, quantity: oldQuantity, price: oldPrice, unity: oldUnity, category: oldCategory, image} = route.params
 
     const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
+
+    useEffect(() => {
+        console.log(oldName)
+        setName(oldName)
+        setQuantity(oldQuantity)
+        setPrice(oldPrice)
+        setUnity(oldUnity)
+        setCategory(oldCategory)
+    }, []);
+
 
     useEffect(() => {
         const db = getDatabase();
@@ -54,22 +63,6 @@ const EditProductFromInventory = ({route, navigation}) => {
         });
     }, [user]);
 
-
-    const pickImage = async () => {
-
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            quality: 0.5,
-            base64: true
-        });
-
-        console.log(result);
-
-        if (!result.cancelled) {
-            setImageUri(result.uri);
-        }
-    };
 
     function addCategory() {
         setNewCategoryNameError("")
@@ -91,33 +84,23 @@ const EditProductFromInventory = ({route, navigation}) => {
         setAddingProductError("")
         setSuccessMsg("")
 
-        if (name.length === 0 || !imageUri || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || !imageUri) {
+        if (name.length === 0 || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0) {
             setAddingProductError("Fill up all the data first!")
             return
         }
 
-        const imgName = "img-" + new Date().getTime();
-        const storage = getStorage();
-
         try {
-            const response = await fetch(imageUri)
-            const blobFile = await response.blob()
-
-            const reference = firebaseStorageRef(storage, `${user?.uid}/${imgName}.jpg`)
-            const result = await uploadBytes(reference, blobFile)
-            const imgUrl = await getDownloadURL(result.ref)
-
             const db = getDatabase();
-            const productsRef = ref(db, `${user?.uid}/${selectedStore}/inventory/${date}/products`);
-            const newProductRef = push(productsRef);
-            await set(newProductRef, {
+            const updates = {};
+            updates[`${user?.uid}/${selectedStore}/inventory/${dt}/products/${id}`] = {
                 name: name,
                 quantity: parseFloat(quantity),
                 price: parseFloat(price),
                 unity: unity,
                 category: category,
-                image: imgUrl
-            });
+                image: image
+            };
+            await update(ref(db), updates);
 
             setSuccessMsg("Product added successfully!")
 
@@ -130,7 +113,6 @@ const EditProductFromInventory = ({route, navigation}) => {
         setPrice("")
         setUnity("")
         setCategory("")
-        setImageUri(null)
 
     }
 
@@ -217,26 +199,6 @@ const EditProductFromInventory = ({route, navigation}) => {
                         </Modal.Footer>
                     </Modal.Content>
                 </Modal>
-
-
-                <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-                    <Pressable onPress={pickImage} style={{
-                        flexDirection: "row",
-                        backgroundColor: "#e0e0e0",
-                        paddingVertical: 16,
-                        borderRadius: 8,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginBottom: 16,
-                        flex: 1,
-                        marginRight: imageUri ? 16 : 0
-                    }}>
-                        <Text style={{textAlign: "center", marginRight: 4}}>Product image </Text>
-                        <Icon color="black" as={AntDesign} name="caretdown" size="sm"/>
-                    </Pressable>
-
-                    {imageUri !== null ? <Icon color="#22bb33" as={AntDesign} name="checkcircle" size="lg"/> : null}
-                </View>
 
                 <Button onPress={() => editProduct()}>Edit</Button>
 
