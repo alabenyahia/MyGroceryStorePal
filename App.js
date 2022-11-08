@@ -39,16 +39,15 @@ export default function App() {
     return (
         <>
             <StatusBar backgroundColor={"#F16B44"}/>
-
-            <NavigationContainer>
-                <SafeAreaProvider>
-                    <NativeBaseProvider theme={theme}>
-                        <GlobalProvider>
+            <GlobalProvider>
+                <NavigationContainer>
+                    <SafeAreaProvider>
+                        <NativeBaseProvider theme={theme}>
                             <RootNavigation/>
-                        </GlobalProvider>
-                    </NativeBaseProvider>
-                </SafeAreaProvider>
-            </NavigationContainer>
+                        </NativeBaseProvider>
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </GlobalProvider>
         </>
 
     );

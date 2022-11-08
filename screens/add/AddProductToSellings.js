@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {Image, Pressable, ScrollView, Text, View} from "react-native";
-import {Button, Divider, Fab, Icon, Input} from "native-base";
+import {Box, Button, Divider, Fab, Icon, Input, useToast} from "native-base";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import {getDatabase, ref, onValue, update} from "firebase/database";
 import GlobalContext from "../../context/GlobalContext";
@@ -15,9 +15,10 @@ const AddProductToSellings = ({route}) => {
     const [inventoryProducts, setInventoryProducts] = useState([])
     const [dateText, setDateText] = useState("")
     const [quantities, setQuantities] = useState({})
-    const [error, setError] = useState("")
 
     const {date} = route.params
+
+    const toast = useToast();
 
     useEffect(() => {
         console.log("inventoryproducts", inventoryProducts)
@@ -125,7 +126,8 @@ const AddProductToSellings = ({route}) => {
                                         unity: inventoryProducts[i].value.unity,
                                         category: inventoryProducts[i].value.category,
                                         image: inventoryProducts[i].value.image,
-                                        quantity: inventoryProducts[i].value.quantity
+                                        quantity: inventoryProducts[i].value.quantity,
+                                        maxQuantity: inventoryProducts[i].value.quantity
                                     }
                                 })
 
@@ -136,7 +138,8 @@ const AddProductToSellings = ({route}) => {
                                         unity: inventoryProducts[i].value.unity,
                                         category: inventoryProducts[i].value.category,
                                         image: inventoryProducts[i].value.image,
-                                        quantity: parseInt(value)
+                                        quantity: parseInt(value),
+                                        maxQuantity: inventoryProducts[i].value.quantity
                                     }})
                             }
                         }}/>
@@ -193,7 +196,13 @@ const AddProductToSellings = ({route}) => {
      function addProducts() {
         setError("")
         if (isUserNotAddedAnyProduct()) {
-            setError("You need to add at least one product")
+            toast.show({
+                render: () => {
+                    return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
+                        You need to add at least one product!
+                    </Box>;
+                }
+            });
             return
         }
         const db = getDatabase();
@@ -208,14 +217,19 @@ const AddProductToSellings = ({route}) => {
 
             update(ref(db), updates);
         })
+
+         toast.show({
+             render: () => {
+                 return <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+                     Product added to sellings successfully!
+                 </Box>;
+             }
+         });
     }
 
     return (
         <SafeAreaView style={{paddingTop: 24}}>
             <ScrollView>
-
-                {error && <Text style={{padding: 16, paddingTop: 0, textAlign: "center", color: "#cc0000"}}>{error}</Text>}
-
                 {renderProducts()}
 
                 <View style={{paddingHorizontal: 16}}>

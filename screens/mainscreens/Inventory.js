@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Image, Pressable, ScrollView, View} from "react-native";
+import {Image, Pressable, ScrollView, ToastAndroid, View} from "react-native";
 import {Button, Divider, Fab, Icon, Text} from "native-base";
 import {AntDesign} from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -17,6 +17,13 @@ const Inventory = ({navigation}) => {
     const {user} = useAuthentication();
 
     const {selectedStore} = useContext(GlobalContext)
+
+    useEffect(() => {
+        if (!selectedStore) {
+            navigation.navigate("Home")
+            ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+        }
+    }, [selectedStore])
 
     useEffect(() => {
         const dt = new Date()
@@ -82,17 +89,23 @@ const Inventory = ({navigation}) => {
                     shadowRadius: 2.22,
 
                     elevation: 3,
-                }} onPress={() => navigation.navigate("EditProductFromInventory", {
-                    id: inventoryProducts[i].key,
-                    dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
-                        '-' + (date.getFullYear()).toString(),
-                    name: inventoryProducts[i].value.name,
-                    quantity: inventoryProducts[i].value.quantity.toString(),
-                    price: inventoryProducts[i].value.price.toString(),
-                    unity: inventoryProducts[i].value.unity,
-                    category: inventoryProducts[i].value.category,
-                    image: inventoryProducts[i].value.image
-                })}>
+                }} onPress={() => {
+                    if (!selectedStore) {
+                        ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        return
+                    }
+                    navigation.navigate("EditProductFromInventory", {
+                        id: inventoryProducts[i].key,
+                        dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
+                            '-' + (date.getFullYear()).toString(),
+                        name: inventoryProducts[i].value.name,
+                        quantity: inventoryProducts[i].value.quantity.toString(),
+                        price: inventoryProducts[i].value.price.toString(),
+                        unity: inventoryProducts[i].value.unity,
+                        category: inventoryProducts[i].value.category,
+                        image: inventoryProducts[i].value.image
+                    })
+                }}>
                     <Image source={{uri: inventoryProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>
                     <View style={{padding: 6}}>
@@ -130,6 +143,7 @@ const Inventory = ({navigation}) => {
         })
     }
 
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -153,10 +167,16 @@ const Inventory = ({navigation}) => {
 
                 {renderProducts()}
 
-                <Fab onPress={() => navigation.navigate("AddProductToInventory", {
-                    date: dateText === 'Today' ? date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
-                        '-' + (date.getFullYear()).toString() : dateText
-                })} renderInPortal={false} shadow={3}
+                <Fab onPress={() => {
+                    if (!selectedStore) {
+                        ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        return
+                    }
+                    navigation.navigate("AddProductToInventory", {
+                        date: dateText === 'Today' ? date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
+                            '-' + (date.getFullYear()).toString() : dateText
+                    })
+                }} renderInPortal={false} shadow={3}
                      size="md" icon={<Icon color="white" as={AntDesign} name="plus" size="sm"/>}/>
 
 

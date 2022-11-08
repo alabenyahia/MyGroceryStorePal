@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {Image, Pressable, ScrollView, View} from "react-native";
+import {Image, Pressable, ScrollView, ToastAndroid, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Button, Divider, Fab, Icon, Text} from "native-base";
 import {AntDesign} from "@expo/vector-icons";
@@ -16,6 +16,14 @@ const Sellings = ({navigation}) => {
     const {user} = useAuthentication();
 
     const {selectedStore} = useContext(GlobalContext)
+
+    useEffect(() => {
+        if (!selectedStore) {
+            navigation.navigate("Home")
+            ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+        }
+    }, [selectedStore])
+
 
     useEffect(() => {
         const dt = new Date()
@@ -81,17 +89,24 @@ const Sellings = ({navigation}) => {
                     shadowRadius: 2.22,
 
                     elevation: 3,
-                }} onPress={() => navigation.navigate("EditProductFromSellings", {
-                    id: sellingsProducts[i].key,
-                    dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
-                        '-' + (date.getFullYear()).toString(),
-                    name: sellingsProducts[i].value.name,
-                    quantity: sellingsProducts[i].value.quantity.toString(),
-                    price: sellingsProducts[i].value.price.toString(),
-                    unity: sellingsProducts[i].value.unity,
-                    category: sellingsProducts[i].value.category,
-                    image: sellingsProducts[i].value.image
-                })}>
+                }} onPress={() => {
+                    if (!selectedStore) {
+                        ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        return
+                    }
+                    navigation.navigate("EditProductFromSellings", {
+                        id: sellingsProducts[i].key,
+                        dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
+                            '-' + (date.getFullYear()).toString(),
+                        name: sellingsProducts[i].value.name,
+                        quantity: sellingsProducts[i].value.quantity.toString(),
+                        price: sellingsProducts[i].value.price.toString(),
+                        unity: sellingsProducts[i].value.unity,
+                        category: sellingsProducts[i].value.category,
+                        image: sellingsProducts[i].value.image,
+                        maxQuantity: sellingsProducts[i].value.maxQuantity
+                    })
+                }}>
                     <Image source={{uri: sellingsProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>
                     <View style={{padding: 6}}>
@@ -152,7 +167,13 @@ const Sellings = ({navigation}) => {
 
                 {renderProducts()}
 
-                <Fab onPress={() => navigation.navigate("AddProductToSellings", {date: date})} renderInPortal={false} shadow={3}
+                <Fab onPress={() => {
+                    if (!selectedStore) {
+                        ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+                        return
+                    }
+                    navigation.navigate("AddProductToSellings", {date: date})
+                }} renderInPortal={false} shadow={3}
                      size="md" icon={<Icon color="white" as={AntDesign} name="plus" size="sm"/>}/>
 
 

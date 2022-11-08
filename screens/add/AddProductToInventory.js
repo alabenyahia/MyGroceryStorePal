@@ -2,7 +2,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import {Pressable, ScrollView, Text, View} from "react-native";
 
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, FormControl, Icon, Input, Modal, Select, WarningOutlineIcon} from "native-base";
+import {Box, Button, FormControl, Icon, Input, Modal, Select, useToast, WarningOutlineIcon} from "native-base";
 
 import * as ImagePicker from 'expo-image-picker';
 import {AntDesign} from "@expo/vector-icons";
@@ -24,13 +24,14 @@ const AddProductToInventory = ({route}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
     const [newCategoryNameError, setNewCategoryNameError] = useState("");
-    const [addingProductError, setAddingProductError] = useState("");
-    const [successMsg, setSuccessMsg] = useState("");
+
 
     const {date} = route.params
 
     const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
+
+    const toast = useToast();
 
     useEffect(() => {
         const db = getDatabase();
@@ -64,7 +65,6 @@ const AddProductToInventory = ({route}) => {
 
     function addCategory() {
         setNewCategoryNameError("")
-        setSuccessMsg("")
         if (newCategoryName.length > 0) {
             const db = getDatabase();
             const postListRef = ref(db, user?.uid + '/categories');
@@ -74,16 +74,26 @@ const AddProductToInventory = ({route}) => {
             setNewCategoryName("")
             setModalVisible(false)
         } else {
-            setNewCategoryNameError("Name shouldn't be empty")
+            setNewCategoryNameError("name shouldn't be empty!")
+            toast.show({
+                render: () => {
+                    return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
+                        Name shouldn't be empty!
+                    </Box>;
+                }
+            });
         }
     }
 
     async function addProduct() {
-        setAddingProductError("")
-        setSuccessMsg("")
-
         if (name.length === 0 || !imageUri || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || !imageUri) {
-            setAddingProductError("Fill up all the data first!")
+            toast.show({
+                render: () => {
+                    return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
+                        Fill up all the data first!
+                    </Box>;
+                }
+            });
             return
         }
 
@@ -110,7 +120,13 @@ const AddProductToInventory = ({route}) => {
                 image: imgUrl
             });
 
-            setSuccessMsg("Product added successfully!")
+            toast.show({
+                render: () => {
+                    return <Box bg="emerald.500" px="4" py="4" rounded="sm" mb={5}>
+                        Product added to inventory successfully
+                    </Box>;
+                }
+            });
 
         } catch (err) {
             return Promise.reject(err)
@@ -128,8 +144,6 @@ const AddProductToInventory = ({route}) => {
     return (
         <SafeAreaView style={{padding: 16}}>
             <ScrollView>
-                {addingProductError && <Text style={{marginBottom: 12, textAlign: "center", color: "#cc0000"}}>{addingProductError}</Text>}
-                {successMsg && <Text style={{marginBottom: 12, textAlign: "center", color: "#22bb33"}}>{successMsg}</Text>}
                 <Input placeholder="Product name" mb={4} value={name} onChangeText={(value) => {
                     setName(value)
                 }}/>

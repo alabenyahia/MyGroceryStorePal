@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
@@ -15,6 +15,7 @@ import AddProductToInventory from "../screens/add/AddProductToInventory";
 import EditProductFromInventory from "../screens/edit/EditProductFromInventory";
 import AddProductToSellings from "../screens/add/AddProductToSellings";
 import EditProductFromSellings from "../screens/edit/EditProductFromSellings";
+import SelectStore from "../screens/mainscreens/SelectStore";
 
 const Drawer = createDrawerNavigator();
 
@@ -23,6 +24,7 @@ export default function UserDrawer() {
         <NavigationContainer independent={true} >
             <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} />}
                               screenOptions={{headerStyle: {backgroundColor: '#F16B44'}, headerTintColor: '#dcdcdc'}}>
+
                 <Drawer.Screen name="Home" component={Home}/>
                 <Drawer.Screen name="Inventory" component={Inventory}/>
                 <Drawer.Screen name="Sellings" component={Sellings}/>
@@ -59,6 +61,15 @@ export default function UserDrawer() {
                 />
 
                 <Drawer.Screen
+                    name="EditProductFromInventory"
+                    component={EditProductFromInventory}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Edit Inventiry Product",
+                    }}
+                />
+
+                <Drawer.Screen
                     name="EditProductFromSellings"
                     component={EditProductFromSellings}
                     options={{
@@ -66,6 +77,8 @@ export default function UserDrawer() {
                         title: "Edit Sellings Product",
                     }}
                 />
+
+
             </Drawer.Navigator>
         </NavigationContainer>
     );

@@ -1,16 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Pressable, ScrollView, Text, View} from "react-native";
 import {
-    Alert, Box,
-    Button, Collapse,
+    Box,
+    Button,
     Divider,
     FormControl,
-    HStack,
     Icon,
     Input,
     Modal,
-    Select,
-    VStack,
+    Select, useToast,
     WarningOutlineIcon
 } from "native-base";
 import {AntDesign} from "@expo/vector-icons";
@@ -18,8 +16,6 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import GlobalContext from "../../context/GlobalContext";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import {getDatabase, onValue, push, ref, set, remove, update} from "firebase/database";
-import * as ImagePicker from "expo-image-picker";
-import {getDownloadURL, getStorage, ref as firebaseStorageRef, uploadBytes} from "firebase/storage";
 
 const EditProductFromInventory = ({route, navigation}) => {
     const [name, setName] = useState("");
@@ -30,15 +26,15 @@ const EditProductFromInventory = ({route, navigation}) => {
     const [categories, setCategories] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
-    const [newCategoryNameError, setNewCategoryNameError] = useState("");
-    const [addingProductError, setAddingProductError] = useState("");
-    const [successMsg, setSuccessMsg] = useState("");
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [newCategoryNameError, setNewCategoryNameError] = useState("");
 
     const {id, dt, name: oldName, quantity: oldQuantity, price: oldPrice, unity: oldUnity, category: oldCategory, image} = route.params
 
     const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
+
+    const toast = useToast();
 
     useEffect(() => {
         console.log(oldName)
@@ -66,7 +62,6 @@ const EditProductFromInventory = ({route, navigation}) => {
 
     function addCategory() {
         setNewCategoryNameError("")
-        setSuccessMsg("")
         if (newCategoryName.length > 0) {
             const db = getDatabase();
             const postListRef = ref(db, user?.uid + '/categories');
@@ -76,16 +71,26 @@ const EditProductFromInventory = ({route, navigation}) => {
             setNewCategoryName("")
             setModalVisible(false)
         } else {
-            setNewCategoryNameError("Name shouldn't be empty")
+            setNewCategoryNameError("name shouldn't be empty!")
+            toast.show({
+                render: () => {
+                    return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
+                        Name shouldn't be empty!
+                    </Box>;
+                }
+            });
         }
     }
 
     async function editProduct() {
-        setAddingProductError("")
-        setSuccessMsg("")
-
         if (name.length === 0 || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0) {
-            setAddingProductError("Fill up all the data first!")
+            toast.show({
+                render: () => {
+                    return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
+                        Fill up all the data first!
+                    </Box>;
+                }
+            });
             return
         }
 
@@ -102,7 +107,13 @@ const EditProductFromInventory = ({route, navigation}) => {
             };
             await update(ref(db), updates);
 
-            setSuccessMsg("Product added successfully!")
+            toast.show({
+                render: () => {
+                    return <Box bg="emerald.500" px="4" py="4" rounded="sm" mb={5}>
+                        Product updated successfully
+                    </Box>;
+                }
+            });
 
         } catch (err) {
             return Promise.reject(err)
@@ -128,10 +139,6 @@ const EditProductFromInventory = ({route, navigation}) => {
     return (
         <SafeAreaView style={{padding: 16}}>
             <ScrollView>
-                {addingProductError &&
-                    <Text style={{marginBottom: 12, textAlign: "center", color: "#cc0000"}}>{addingProductError}</Text>}
-                {successMsg &&
-                    <Text style={{marginBottom: 12, textAlign: "center", color: "#22bb33"}}>{successMsg}</Text>}
                 <Input placeholder="Product name" mb={4} value={name} onChangeText={(value) => {
                     setName(value)
                 }}/>

@@ -1,9 +1,20 @@
-import React from 'react';
-import {ScrollView, Text} from "react-native";
+import React, {useContext} from 'react';
+import {ScrollView, Text, ToastAndroid} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Box, Button, Divider} from "native-base"
+import GlobalContext from "../../context/GlobalContext";
 
-const Reports = () => {
+const Reports = ({navigation}) => {
+
+    const {selectedStore} = useContext(GlobalContext)
+
+    useEffect(() => {
+        if (!selectedStore) {
+            navigation.navigate("Home")
+            ToastAndroid.show('Please select a store from the burger menu first!', ToastAndroid.SHORT);
+        }
+    }, [selectedStore])
+
     return (
         <SafeAreaView style={{padding: 16}}>
             <ScrollView>
