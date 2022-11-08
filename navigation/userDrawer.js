@@ -11,9 +11,8 @@ import Tutorial from "../screens/mainscreens/Tutorial";
 import Settings from "../screens/mainscreens/Settings";
 import CustomDrawerContent from "../components/customDrawerContent";
 import EditStore from "../screens/edit/EditStore";
-import {AntDesign} from "@expo/vector-icons";
-import {Button, Icon} from "native-base";
 import AddProductToInventory from "../screens/add/AddProductToInventory";
+import EditProductFromInventory from "../screens/edit/EditProductFromInventory";
 
 const Drawer = createDrawerNavigator();
 
@@ -44,7 +43,16 @@ export default function UserDrawer() {
                     component={AddProductToInventory}
                     options={{
                         drawerItemStyle: { display: "none" },
-                        title: "Add Product To Inventory",
+                        title: "Add Inventory Product",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="EditProductFromInventory"
+                    component={EditProductFromInventory}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Edit Inventory Product",
                     }}
                 />
             </Drawer.Navigator>

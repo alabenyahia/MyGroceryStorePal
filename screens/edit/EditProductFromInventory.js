@@ -1,19 +1,27 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Pressable, ScrollView, Text, View} from "react-native";
-
-import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, FormControl, Icon, Input, Modal, Select, WarningOutlineIcon} from "native-base";
-
-import * as ImagePicker from 'expo-image-picker';
+import {
+    Alert, Box,
+    Button, Collapse,
+    Divider,
+    FormControl,
+    HStack,
+    Icon,
+    Input,
+    Modal,
+    Select,
+    VStack,
+    WarningOutlineIcon
+} from "native-base";
 import {AntDesign} from "@expo/vector-icons";
-import {useAuthentication} from "../../utils/hooks/useAuthentication";
-
-import {getDatabase, ref, set, push, onValue} from "firebase/database";
-import {getStorage, ref as firebaseStorageRef, uploadBytes, getDownloadURL} from "firebase/storage";
+import {SafeAreaView} from "react-native-safe-area-context";
 import GlobalContext from "../../context/GlobalContext";
+import {useAuthentication} from "../../utils/hooks/useAuthentication";
+import {getDatabase, onValue, push, ref, set, remove} from "firebase/database";
+import * as ImagePicker from "expo-image-picker";
+import {getDownloadURL, getStorage, ref as firebaseStorageRef, uploadBytes} from "firebase/storage";
 
-
-const AddProductToInventory = ({route}) => {
+const EditProductFromInventory = ({route, navigation}) => {
     const [imageUri, setImageUri] = useState(null);
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
@@ -26,15 +34,16 @@ const AddProductToInventory = ({route}) => {
     const [newCategoryNameError, setNewCategoryNameError] = useState("");
     const [addingProductError, setAddingProductError] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
-    const {date} = route.params
+    const {id, dt} = route.params
 
     const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
 
     useEffect(() => {
         const db = getDatabase();
-        const categoriesRef = ref(db, user?.uid +'/categories');
+        const categoriesRef = ref(db, user?.uid + '/categories');
         onValue(categoriesRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -78,7 +87,7 @@ const AddProductToInventory = ({route}) => {
         }
     }
 
-    async function addProduct() {
+    async function editProduct() {
         setAddingProductError("")
         setSuccessMsg("")
 
@@ -125,11 +134,22 @@ const AddProductToInventory = ({route}) => {
 
     }
 
+    async function deleteProduct() {
+        console.log(selectedStore, dt, id)
+        const db = getDatabase();
+        const productRef = ref(db, user?.uid + '/' + selectedStore + '/inventory/' + dt + '/products/' + id);
+        await remove(productRef)
+        setShowDeleteAlert(false)
+        navigation.navigate("Inventory")
+    }
+
     return (
         <SafeAreaView style={{padding: 16}}>
             <ScrollView>
-                {addingProductError && <Text style={{marginBottom: 12, textAlign: "center", color: "#cc0000"}}>{addingProductError}</Text>}
-                {successMsg && <Text style={{marginBottom: 12, textAlign: "center", color: "#22bb33"}}>{successMsg}</Text>}
+                {addingProductError &&
+                    <Text style={{marginBottom: 12, textAlign: "center", color: "#cc0000"}}>{addingProductError}</Text>}
+                {successMsg &&
+                    <Text style={{marginBottom: 12, textAlign: "center", color: "#22bb33"}}>{successMsg}</Text>}
                 <Input placeholder="Product name" mb={4} value={name} onChangeText={(value) => {
                     setName(value)
                 }}/>
@@ -144,16 +164,17 @@ const AddProductToInventory = ({route}) => {
                     <Select.Item label="1kg" value="1kg" key={1}/>
                 </Select>
 
-                <Input placeholder="Price per unit" keyboardType="numeric" mb={4} value={price} onChangeText={(value) => {
-                    setPrice(value)
-                }}/>
-
+                <Input placeholder="Price per unit" keyboardType="numeric" mb={4} value={price}
+                       onChangeText={(value) => {
+                           setPrice(value)
+                       }}/>
 
                 <View style={{flexDirection: "row"}}>
                     <View style={{flex: 2, marginRight: 12}}>
                         <Select selectedValue={category} placeholder="Category"
                                 onValueChange={itemValue => setCategory(itemValue)} mb={4}>
-                            {categories.map(category => <Select.Item label={category.label} value={category.value} key={category.value}/>)}
+                            {categories.map(category => <Select.Item label={category.label} value={category.value}
+                                                                     key={category.value}/>)}
                         </Select>
                     </View>
 
@@ -217,11 +238,28 @@ const AddProductToInventory = ({route}) => {
                     {imageUri !== null ? <Icon color="#22bb33" as={AntDesign} name="checkcircle" size="lg"/> : null}
                 </View>
 
-                <Button onPress={() => addProduct()}>Add</Button>
+                <Button onPress={() => editProduct()}>Edit</Button>
 
+                <Divider mt={6} mb={6}/>
+
+                <Button colorScheme="danger" onPress={() => setShowDeleteAlert(true)}>Delete From Inventory</Button>
+
+                <Modal isOpen={showDeleteAlert} onClose={() => setShowDeleteAlert(false)} avoidKeyboard
+                       justifyContent="flex-end" bottom="4" size="lg">
+                    <Modal.Content>
+                        <Modal.CloseButton/>
+                        <Modal.Body mt={10}>
+                            <Text>Are you sure, you want to delete this product from {dt} inventory</Text>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button colorScheme="danger" flex="1" onPress={() => deleteProduct()} mr={4}>YES</Button>
+                            <Button flex="1" onPress={() => setShowDeleteAlert(false)}>NO</Button>
+                        </Modal.Footer>
+                    </Modal.Content>
+                </Modal>
             </ScrollView>
         </SafeAreaView>
     );
 };
 
-export default AddProductToInventory;
+export default EditProductFromInventory;

@@ -39,8 +39,12 @@ const Inventory = ({navigation}) => {
         const productsRef = ref(db, user?.uid + '/' + selectedStore + '/inventory/' + dt + '/products');
         onValue(productsRef, (snapshot) => {
             const data = snapshot.val();
-            let output = Object.entries(data).map(([key, value]) => ({key, value}));
-            setInventoryProducts(output)
+            if (data) {
+                let output = Object.entries(data).map(([key, value]) => ({key, value}));
+                setInventoryProducts(output)
+            } else {
+                setInventoryProducts([])
+            }
         });
     }, [date, user]);
 
@@ -78,7 +82,11 @@ const Inventory = ({navigation}) => {
                     shadowRadius: 2.22,
 
                     elevation: 3,
-                }}>
+                }} onPress={() => navigation.navigate("EditProductFromInventory", {
+                    id: inventoryProducts[i].key,
+                    dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
+                        '-' + (date.getFullYear()).toString()
+                })}>
                     <Image source={{uri: inventoryProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>
                     <View style={{padding: 6}}>
@@ -86,7 +94,7 @@ const Inventory = ({navigation}) => {
                         <Divider mt={1} mb={1}/>
                         <Text>X{inventoryProducts[i].value.quantity}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>{inventoryProducts[i].value.price}TND</Text>
+                        <Text>{inventoryProducts[i].value.price}TND per {inventoryProducts[i].value.unity}</Text>
                     </View>
                 </Pressable>
             )

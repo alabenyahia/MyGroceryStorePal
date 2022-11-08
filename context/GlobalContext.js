@@ -20,6 +20,8 @@ export const GlobalProvider = ({children}) => {
                     let output = Object.entries(data).map(([key, value]) => ({key, value}));
 
                     setStores(output)
+                } else {
+                    setStores([])
                 }
                 console.log("stores", data)
             });
