@@ -13,6 +13,8 @@ import CustomDrawerContent from "../components/customDrawerContent";
 import EditStore from "../screens/edit/EditStore";
 import AddProductToInventory from "../screens/add/AddProductToInventory";
 import EditProductFromInventory from "../screens/edit/EditProductFromInventory";
+import AddProductToSellings from "../screens/add/AddProductToSellings";
+import EditProductFromSellings from "../screens/edit/EditProductFromSellings";
 
 const Drawer = createDrawerNavigator();
 
@@ -48,11 +50,20 @@ export default function UserDrawer() {
                 />
 
                 <Drawer.Screen
-                    name="EditProductFromInventory"
-                    component={EditProductFromInventory}
+                    name="AddProductToSellings"
+                    component={AddProductToSellings}
                     options={{
                         drawerItemStyle: { display: "none" },
-                        title: "Edit Inventory Product",
+                        title: "Add Sellings Product",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="EditProductFromSellings"
+                    component={EditProductFromSellings}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Edit Sellings Product",
                     }}
                 />
             </Drawer.Navigator>
