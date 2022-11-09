@@ -194,7 +194,6 @@ const AddProductToSellings = ({route}) => {
     }
 
      function addProducts() {
-        setError("")
         if (isUserNotAddedAnyProduct()) {
             toast.show({
                 render: () => {

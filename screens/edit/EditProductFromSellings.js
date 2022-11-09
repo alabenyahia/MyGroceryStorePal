@@ -54,31 +54,27 @@ const EditProductFromSellings = ({route, navigation}) => {
             const db = getDatabase();
             let updates = {};
             if (parseInt(quantity) > maxQuantity) {
-                updates = {
+                updates[user?.uid + '/' + selectedStore + '/sellings/' + dt + '/products/' + id] = {
                     name: oldName,
                     price: oldPrice,
                     unity: oldUnity,
                     category: oldCategory,
                     image: image,
-                    quantity: maxQuantity,
+                    quantity: parseInt(maxQuantity),
                     maxQuantity: maxQuantity
                 }
 
             } else {
-                updates =  {
+                updates[user?.uid + '/' + selectedStore + '/sellings/' + dt + '/products/' + id] =  {
                     name: oldName,
                     price: oldPrice,
                     unity: oldUnity,
                     category: oldCategory,
                     image: image,
-                    quantity: quantity,
+                    quantity: parseInt(quantity),
                     maxQuantity: maxQuantity
                 }
             }
-
-            updates[`${user?.uid}/${selectedStore}/sellings/${dt}/products/${id}`] = {
-                quantity: parseFloat(quantity)
-            };
             await update(ref(db), updates);
 
             toast.show({
@@ -93,9 +89,7 @@ const EditProductFromSellings = ({route, navigation}) => {
             return Promise.reject(err)
         }
 
-
         setQuantity("")
-
     }
 
     async function deleteProduct() {
