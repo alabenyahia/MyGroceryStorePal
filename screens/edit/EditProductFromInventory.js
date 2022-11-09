@@ -21,6 +21,7 @@ const EditProductFromInventory = ({route, navigation}) => {
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
     const [price, setPrice] = useState("");
+    const [profit, setProfit] = useState("");
     const [unity, setUnity] = useState("");
     const [category, setCategory] = useState("");
     const [categories, setCategories] = useState([]);
@@ -29,7 +30,7 @@ const EditProductFromInventory = ({route, navigation}) => {
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [newCategoryNameError, setNewCategoryNameError] = useState("");
 
-    const {id, dt, name: oldName, quantity: oldQuantity, price: oldPrice, unity: oldUnity, category: oldCategory, image} = route.params
+    const {id, dt, name: oldName, quantity: oldQuantity, price: oldPrice, unity: oldUnity, category: oldCategory, profit: oldProfit, image} = route.params
 
     const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
@@ -43,6 +44,7 @@ const EditProductFromInventory = ({route, navigation}) => {
         setPrice(oldPrice)
         setUnity(oldUnity)
         setCategory(oldCategory)
+        setProfit(oldProfit)
     }, []);
 
 
@@ -83,7 +85,7 @@ const EditProductFromInventory = ({route, navigation}) => {
     }
 
     async function editProduct() {
-        if (name.length === 0 || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0) {
+        if (name.length === 0 || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || profit.length === 0) {
             toast.show({
                 render: () => {
                     return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
@@ -101,6 +103,7 @@ const EditProductFromInventory = ({route, navigation}) => {
                 name: name,
                 quantity: parseFloat(quantity),
                 price: parseFloat(price),
+                profit: parseFloat(profit),
                 unity: unity,
                 category: category,
                 image: image
@@ -122,6 +125,7 @@ const EditProductFromInventory = ({route, navigation}) => {
         setName("")
         setQuantity("")
         setPrice("")
+        setProfit("")
         setUnity("")
         setCategory("")
 
@@ -157,6 +161,10 @@ const EditProductFromInventory = ({route, navigation}) => {
                        onChangeText={(value) => {
                            setPrice(value)
                        }}/>
+
+                <Input placeholder="Profit per unit" keyboardType="numeric" mb={4} value={profit} onChangeText={(value) => {
+                    setProfit(value)
+                }}/>
 
                 <View style={{flexDirection: "row"}}>
                     <View style={{flex: 2, marginRight: 12}}>

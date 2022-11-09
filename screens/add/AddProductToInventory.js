@@ -18,6 +18,7 @@ const AddProductToInventory = ({route}) => {
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
     const [price, setPrice] = useState("");
+    const [profit, setProfit] = useState("");
     const [unity, setUnity] = useState("");
     const [category, setCategory] = useState("");
     const [categories, setCategories] = useState([]);
@@ -86,7 +87,7 @@ const AddProductToInventory = ({route}) => {
     }
 
     async function addProduct() {
-        if (name.length === 0 || !imageUri || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || !imageUri) {
+        if (name.length === 0 || !imageUri || quantity.length === 0 || price.length === 0 || unity.length === 0 || category.length === 0 || !imageUri ||profit.length === 0) {
             toast.show({
                 render: () => {
                     return <Box bg="error.500" px="4" py="4" rounded="sm" mb={5}>
@@ -115,6 +116,7 @@ const AddProductToInventory = ({route}) => {
                 name: name,
                 quantity: parseFloat(quantity),
                 price: parseFloat(price),
+                profit: parseFloat(profit),
                 unity: unity,
                 category: category,
                 image: imgUrl
@@ -135,6 +137,7 @@ const AddProductToInventory = ({route}) => {
         setName("")
         setQuantity("")
         setPrice("")
+        setProfit("")
         setUnity("")
         setCategory("")
         setImageUri(null)
@@ -160,6 +163,10 @@ const AddProductToInventory = ({route}) => {
 
                 <Input placeholder="Price per unit" keyboardType="numeric" mb={4} value={price} onChangeText={(value) => {
                     setPrice(value)
+                }}/>
+
+                <Input placeholder="Profit per unit" keyboardType="numeric" mb={4} value={profit} onChangeText={(value) => {
+                    setProfit(value)
                 }}/>
 
 

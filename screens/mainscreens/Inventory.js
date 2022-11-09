@@ -116,6 +116,7 @@ const Inventory = ({navigation}) => {
                         name: usedProducts[i].value.name,
                         quantity: usedProducts[i].value.quantity.toString(),
                         price: usedProducts[i].value.price.toString(),
+                        profit: usedProducts[i].value.profit.toString(),
                         unity: usedProducts[i].value.unity,
                         category: usedProducts[i].value.category,
                         image: usedProducts[i].value.image

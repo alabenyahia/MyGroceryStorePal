@@ -16,6 +16,9 @@ import EditProductFromInventory from "../screens/edit/EditProductFromInventory";
 import AddProductToSellings from "../screens/add/AddProductToSellings";
 import EditProductFromSellings from "../screens/edit/EditProductFromSellings";
 import SelectStore from "../screens/mainscreens/SelectStore";
+import MostSoldProducts from "../screens/reports/MostSoldProducts";
+import LeastSoldProducts from "../screens/reports/LeastSoldProducts";
+import MostProductsThatMadeProfit from "../screens/reports/MostProductsThatMadeProfit";
 
 const Drawer = createDrawerNavigator();
 
@@ -75,6 +78,33 @@ export default function UserDrawer() {
                     options={{
                         drawerItemStyle: { display: "none" },
                         title: "Edit Sellings Product",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="MostSoldProducts"
+                    component={MostSoldProducts}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Most Sold Products",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="LeastSoldProducts"
+                    component={LeastSoldProducts}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Least Sold Products",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="MostProductsThatMadeProfit"
+                    component={MostProductsThatMadeProfit}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Most Products That Made Profit",
                     }}
                 />
 

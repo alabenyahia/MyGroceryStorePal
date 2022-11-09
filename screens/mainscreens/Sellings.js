@@ -61,7 +61,7 @@ const Sellings = ({navigation}) => {
 
     function renderProducts() {
         console.log("sellings products", sellingsProducts)
-        const usedProducts = showSearshResult ? searchedProducts : inventoryProducts
+        const usedProducts = showSearshResult ? searchedProducts : sellingsProducts
 
         if (!usedProducts || usedProducts.length === 0) {
             if (showSearshResult) {

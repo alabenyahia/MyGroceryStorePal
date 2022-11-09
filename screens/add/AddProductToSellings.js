@@ -123,6 +123,7 @@ const AddProductToSellings = ({route}) => {
                                     [inventoryProducts[i].key]: {
                                         name: inventoryProducts[i].value.name,
                                         price: inventoryProducts[i].value.price,
+                                        profit: inventoryProducts[i].value.profit,
                                         unity: inventoryProducts[i].value.unity,
                                         category: inventoryProducts[i].value.category,
                                         image: inventoryProducts[i].value.image,
@@ -135,6 +136,7 @@ const AddProductToSellings = ({route}) => {
                                 setQuantities({...quantities, [inventoryProducts[i].key]: {
                                         name: inventoryProducts[i].value.name,
                                         price: inventoryProducts[i].value.price,
+                                        profit: inventoryProducts[i].value.profit,
                                         unity: inventoryProducts[i].value.unity,
                                         category: inventoryProducts[i].value.category,
                                         image: inventoryProducts[i].value.image,
