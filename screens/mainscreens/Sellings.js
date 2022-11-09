@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {Image, Pressable, ScrollView, ToastAndroid, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, Divider, Fab, Icon, Text} from "native-base";
-import {AntDesign} from "@expo/vector-icons";
+import {Button, Divider, Fab, Icon, Input, Text} from "native-base";
+import {AntDesign, FontAwesome} from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import GlobalContext from "../../context/GlobalContext";
@@ -13,6 +13,10 @@ const Sellings = ({navigation}) => {
     const [dateText, setDateText] = useState("")
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [sellingsProducts, setSellingsProducts] = useState([])
+    const [search, setSearch] = useState("")
+    const [searchedProducts, setSearchProducts] = useState([])
+    const [showSearshResult, setShowSearshResult] = useState(false)
+
     const {user} = useAuthentication();
 
     const {selectedStore} = useContext(GlobalContext)
@@ -57,17 +61,27 @@ const Sellings = ({navigation}) => {
 
     function renderProducts() {
         console.log("sellings products", sellingsProducts)
-        if (!sellingsProducts || sellingsProducts.length === 0) {
-            return (
-                <Text style={{padding: 16, color: "#cc0000"}}>
-                    {dateText} Sellings are still empty, please add more products.
-                </Text>
-            )
+        const usedProducts = showSearshResult ? searchedProducts : inventoryProducts
+
+        if (!usedProducts || usedProducts.length === 0) {
+            if (showSearshResult) {
+                return (
+                    <Text style={{padding: 16, color: "#cc0000"}}>
+                        No products containing the term "{search}" are found.
+                    </Text>
+                )
+            } else {
+                return (
+                    <Text style={{padding: 16, color: "#cc0000"}}>
+                        {dateText} Sellings are still empty, please add more products.
+                    </Text>
+                )
+            }
         }
         let counter = 0
         const all = []
         let part = []
-        for (let i = 0; i < sellingsProducts.length; i++) {
+        for (let i = 0; i < usedProducts.length; i++) {
 
             if (counter > 2) {
                 all.push(part)
@@ -95,31 +109,31 @@ const Sellings = ({navigation}) => {
                         return
                     }
                     navigation.navigate("EditProductFromSellings", {
-                        id: sellingsProducts[i].key,
+                        id: usedProducts[i].key,
                         dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
                             '-' + (date.getFullYear()).toString(),
-                        name: sellingsProducts[i].value.name,
-                        quantity: sellingsProducts[i].value.quantity.toString(),
-                        price: sellingsProducts[i].value.price.toString(),
-                        unity: sellingsProducts[i].value.unity,
-                        category: sellingsProducts[i].value.category,
-                        image: sellingsProducts[i].value.image,
-                        maxQuantity: sellingsProducts[i].value.maxQuantity
+                        name: usedProducts[i].value.name,
+                        quantity: usedProducts[i].value.quantity.toString(),
+                        price: usedProducts[i].value.price.toString(),
+                        unity: usedProducts[i].value.unity,
+                        category: usedProducts[i].value.category,
+                        image: usedProducts[i].value.image,
+                        maxQuantity: usedProducts[i].value.maxQuantity
                     })
                 }}>
-                    <Image source={{uri: sellingsProducts[i].value.image}}
+                    <Image source={{uri: usedProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>
                     <View style={{padding: 6}}>
-                        <Text>{sellingsProducts[i].value.name}</Text>
+                        <Text>{usedProducts[i].value.name}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>X{sellingsProducts[i].value.quantity}</Text>
+                        <Text>X{usedProducts[i].value.quantity}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>{sellingsProducts[i].value.price}TND per {sellingsProducts[i].value.unity}</Text>
+                        <Text>{usedProducts[i].value.price}TND per {usedProducts[i].value.unity}</Text>
                     </View>
                 </Pressable>
             )
 
-            if (i === sellingsProducts.length - 1) {
+            if (i === usedProducts.length - 1) {
                 all.push(part)
             }
             counter++
@@ -144,6 +158,16 @@ const Sellings = ({navigation}) => {
         })
     }
 
+    function searchPressed() {
+        if (search.length > 0) {
+            setSearchProducts(sellingsProducts.filter(product => product.value.name.toUpperCase().includes(search.toUpperCase())))
+            setShowSearshResult(true)
+        } else {
+            setSearchProducts([])
+            setShowSearshResult(false)
+        }
+    }
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -165,7 +189,28 @@ const Sellings = ({navigation}) => {
 
                 <Divider mb={8}/>
 
+                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 16, paddingTop: 0}}>
+
+                    <View style={{flex: 1, marginRight: 12}}>
+                        <Input style={{flex: 1}} placeholder="Search by name..."  value={search} onChangeText={(value) => {
+                            if (value.length === 0) {
+                                setShowSearshResult(false)
+                            }
+                            setSearch(value)
+                        }}/>
+                    </View>
+                    <View>
+                        <Pressable style={{padding: 12, backgroundColor: "#F16B44", borderRadius: 8}} onPress={() => searchPressed()}>
+                            <Icon color="white" as={FontAwesome} name="search" size="md"/>
+                        </Pressable>
+                    </View>
+
+                </View>
+
+                <Divider mb={8}/>
+
                 {renderProducts()}
+
 
                 <Fab onPress={() => {
                     if (!selectedStore) {

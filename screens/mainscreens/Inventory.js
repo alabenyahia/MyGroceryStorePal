@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Image, Pressable, ScrollView, ToastAndroid, View} from "react-native";
-import {Button, Divider, Fab, Icon, Text} from "native-base";
-import {AntDesign} from "@expo/vector-icons";
+import {Button, Divider, Fab, Icon, Input, Text} from "native-base";
+import {AntDesign, FontAwesome, Fontisto} from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {getDatabase, ref, onValue} from "firebase/database";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
@@ -14,9 +14,14 @@ const Inventory = ({navigation}) => {
     const [dateText, setDateText] = useState("")
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [inventoryProducts, setInventoryProducts] = useState([])
+    const [search, setSearch] = useState("")
+    const [searchedProducts, setSearchProducts] = useState([])
+    const [showSearshResult, setShowSearshResult] = useState(false)
+
     const {user} = useAuthentication();
 
     const {selectedStore} = useContext(GlobalContext)
+
 
     useEffect(() => {
         if (!selectedStore) {
@@ -57,17 +62,27 @@ const Inventory = ({navigation}) => {
 
     function renderProducts() {
         console.log("inventory products", inventoryProducts)
-        if (!inventoryProducts || inventoryProducts.length === 0) {
-            return (
-                <Text style={{padding: 16, color: "#cc0000"}}>
-                    {dateText} Inventory is still empty, please add more products.
-                </Text>
-            )
+        const usedProducts = showSearshResult ? searchedProducts : inventoryProducts
+        if (!usedProducts || usedProducts.length === 0) {
+            if (showSearshResult) {
+                return (
+                    <Text style={{padding: 16, color: "#cc0000"}}>
+                        No products containing the term "{search}" are found.
+                    </Text>
+                )
+            } else {
+                return (
+                    <Text style={{padding: 16, color: "#cc0000"}}>
+                        {dateText} Inventory is still empty, please add more products.
+                    </Text>
+                )
+            }
+
         }
         let counter = 0
         const all = []
         let part = []
-        for (let i = 0; i < inventoryProducts.length; i++) {
+        for (let i = 0; i < usedProducts.length; i++) {
 
             if (counter > 2) {
                 all.push(part)
@@ -95,30 +110,30 @@ const Inventory = ({navigation}) => {
                         return
                     }
                     navigation.navigate("EditProductFromInventory", {
-                        id: inventoryProducts[i].key,
+                        id: usedProducts[i].key,
                         dt: date.getDate().toString().padStart(2, "0") + '-' + (date.getMonth() + 1).toString().padStart(2, "0") +
                             '-' + (date.getFullYear()).toString(),
-                        name: inventoryProducts[i].value.name,
-                        quantity: inventoryProducts[i].value.quantity.toString(),
-                        price: inventoryProducts[i].value.price.toString(),
-                        unity: inventoryProducts[i].value.unity,
-                        category: inventoryProducts[i].value.category,
-                        image: inventoryProducts[i].value.image
+                        name: usedProducts[i].value.name,
+                        quantity: usedProducts[i].value.quantity.toString(),
+                        price: usedProducts[i].value.price.toString(),
+                        unity: usedProducts[i].value.unity,
+                        category: usedProducts[i].value.category,
+                        image: usedProducts[i].value.image
                     })
                 }}>
-                    <Image source={{uri: inventoryProducts[i].value.image}}
+                    <Image source={{uri: usedProducts[i].value.image}}
                            style={{width: "100%", height: 80, alignSelf: 'center'}}/>
                     <View style={{padding: 6}}>
-                        <Text>{inventoryProducts[i].value.name}</Text>
+                        <Text>{usedProducts[i].value.name}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>X{inventoryProducts[i].value.quantity}</Text>
+                        <Text>X{usedProducts[i].value.quantity}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>{inventoryProducts[i].value.price}TND per {inventoryProducts[i].value.unity}</Text>
+                        <Text>{usedProducts[i].value.price}TND per {usedProducts[i].value.unity}</Text>
                     </View>
                 </Pressable>
             )
 
-            if (i === inventoryProducts.length - 1) {
+            if (i === usedProducts.length - 1) {
                 all.push(part)
             }
             counter++
@@ -144,6 +159,16 @@ const Inventory = ({navigation}) => {
     }
 
 
+    function searchPressed() {
+        if (search.length > 0) {
+            setSearchProducts(inventoryProducts.filter(product => product.value.name.toUpperCase().includes(search.toUpperCase())))
+            setShowSearshResult(true)
+        } else {
+            setSearchProducts([])
+            setShowSearshResult(false)
+        }
+    }
+
     return (
         <SafeAreaView>
             <ScrollView>
@@ -161,6 +186,26 @@ const Inventory = ({navigation}) => {
                         }}
                         onCancel={() => setShowDatePicker(false)}
                     />
+                </View>
+
+                <Divider mb={8}/>
+
+                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 16, paddingTop: 0}}>
+
+                    <View style={{flex: 1, marginRight: 12}}>
+                        <Input style={{flex: 1}} placeholder="Search by name..."  value={search} onChangeText={(value) => {
+                            if (value.length === 0) {
+                                setShowSearshResult(false)
+                            }
+                            setSearch(value)
+                        }}/>
+                    </View>
+                    <View>
+                        <Pressable style={{padding: 12, backgroundColor: "#F16B44", borderRadius: 8}} onPress={() => searchPressed()}>
+                            <Icon color="white" as={FontAwesome} name="search" size="md"/>
+                        </Pressable>
+                    </View>
+
                 </View>
 
                 <Divider mb={8}/>
