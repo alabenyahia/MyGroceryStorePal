@@ -18,7 +18,7 @@ const LeastSoldProducts = () => {
 
     const {user} = useAuthentication();
 
-    const {selectedStore} = useContext(GlobalContext)
+    const {selectedStore, currency} = useContext(GlobalContext)
 
     useEffect(() => {
         const dt = new Date()
@@ -126,7 +126,7 @@ const LeastSoldProducts = () => {
                             <Divider mt={1} mb={1}/>
                             <Text>X0</Text>
                             <Divider mt={1} mb={1}/>
-                            <Text>{filteredInventoryProducts[i].value.price}TND per {filteredInventoryProducts[i].value.unity}</Text>
+                            <Text>{filteredInventoryProducts[i].value.price}{currency} per {filteredInventoryProducts[i].value.unity}</Text>
                         </View>
                     </Pressable>
                 </View>
@@ -212,7 +212,7 @@ const LeastSoldProducts = () => {
                             <Divider mt={1} mb={1}/>
                             <Text>X{sortedSellingsProducts[i].value.quantity}</Text>
                             <Divider mt={1} mb={1}/>
-                            <Text>{sortedSellingsProducts[i].value.price}TND per {sortedSellingsProducts[i].value.unity}</Text>
+                            <Text>{sortedSellingsProducts[i].value.price}{currency} per {sortedSellingsProducts[i].value.unity}</Text>
                         </View>
                     </Pressable>
                 </View>

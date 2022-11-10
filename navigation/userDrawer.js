@@ -19,6 +19,8 @@ import SelectStore from "../screens/mainscreens/SelectStore";
 import MostSoldProducts from "../screens/reports/MostSoldProducts";
 import LeastSoldProducts from "../screens/reports/LeastSoldProducts";
 import MostProductsThatMadeProfit from "../screens/reports/MostProductsThatMadeProfit";
+import LeastProductsThatMadeProfit from "../screens/reports/LeastProductsThatMadeProfit";
+import Profits from "../screens/reports/Profits";
 
 const Drawer = createDrawerNavigator();
 
@@ -105,6 +107,24 @@ export default function UserDrawer() {
                     options={{
                         drawerItemStyle: { display: "none" },
                         title: "Most Products That Made Profit",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="LeastProductsThatMadeProfit"
+                    component={LeastProductsThatMadeProfit}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Least Products That Made Profit",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="Profits"
+                    component={Profits}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Profits",
                     }}
                 />
 

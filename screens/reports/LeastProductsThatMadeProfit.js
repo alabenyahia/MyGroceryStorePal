@@ -7,7 +7,7 @@ import {getDatabase, onValue, ref} from "firebase/database";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import GlobalContext from "../../context/GlobalContext";
 
-const MostSoldProducts = () => {
+const MostProductsThatMadeProfit = () => {
     const [date, setDate] = useState(new Date())
     const [dateText, setDateText] = useState("")
     const [showDatePicker, setShowDatePicker] = useState(false)
@@ -49,7 +49,7 @@ const MostSoldProducts = () => {
 
     useEffect(() => {
         const copy = [...sellingsProducts]
-        setSortedSellingsProducts(copy.sort((a, b) => a.value.quantity - b.value.quantity).reverse())
+        setSortedSellingsProducts(copy.sort((a, b) => (a.value.profit * a.value.quantity ) - (a.value.profit * a.value.quantity)))
     }, [sellingsProducts]);
 
 
@@ -71,6 +71,7 @@ const MostSoldProducts = () => {
                 counter = 0;
                 part = []
             }
+            console.log("profit", sortedSellingsProducts[i])
             part.push(
                 <View style={{
                     width: "45%",
@@ -87,8 +88,8 @@ const MostSoldProducts = () => {
 
                     elevation: 3,
                 }}>
-                    <View style={{width: 42, height: 42, borderRadius: 999, padding: 8, backgroundColor: "#F16B44", justifyContent: "center", alignItems: "center", alignSelf: "center", marginVertical: 12}}>
-                        <Text style={{fontWeight: "bold", color: "white"}}>{i+1}</Text>
+                    <View style={{padding: 8, backgroundColor: "#F16B44", justifyContent: "center", alignItems: "center", alignSelf: "center", marginBottom: 12}}>
+                        <Text style={{fontWeight: "bold", color: "white"}}>Profit made: {(sortedSellingsProducts[i].value.profit * sortedSellingsProducts[i].value.quantity).toFixed(2)} {currency}</Text>
                     </View>
                     <Pressable >
                         <Image source={{uri: sortedSellingsProducts[i].value.image}}
@@ -159,4 +160,4 @@ const MostSoldProducts = () => {
     );
 };
 
-export default MostSoldProducts;
+export default MostProductsThatMadeProfit;

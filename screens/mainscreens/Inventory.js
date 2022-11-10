@@ -18,9 +18,10 @@ const Inventory = ({navigation}) => {
     const [searchedProducts, setSearchProducts] = useState([])
     const [showSearshResult, setShowSearshResult] = useState(false)
 
+
     const {user} = useAuthentication();
 
-    const {selectedStore} = useContext(GlobalContext)
+    const {selectedStore, currency} = useContext(GlobalContext)
 
 
     useEffect(() => {
@@ -129,7 +130,7 @@ const Inventory = ({navigation}) => {
                         <Divider mt={1} mb={1}/>
                         <Text>X{usedProducts[i].value.quantity}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>{usedProducts[i].value.price}TND per {usedProducts[i].value.unity}</Text>
+                        <Text>{usedProducts[i].value.price}{currency} per {usedProducts[i].value.unity}</Text>
                     </View>
                 </Pressable>
             )

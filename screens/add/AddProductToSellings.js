@@ -10,7 +10,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 const AddProductToSellings = ({route}) => {
     const {user} = useAuthentication();
 
-    const {selectedStore} = useContext(GlobalContext)
+    const {selectedStore, currency} = useContext(GlobalContext)
 
     const [inventoryProducts, setInventoryProducts] = useState([])
     const [dateText, setDateText] = useState("")
@@ -19,6 +19,8 @@ const AddProductToSellings = ({route}) => {
     const {date} = route.params
 
     const toast = useToast();
+
+
 
     useEffect(() => {
         console.log("inventoryproducts", inventoryProducts)
@@ -111,7 +113,7 @@ const AddProductToSellings = ({route}) => {
                         <Divider mt={1} mb={1}/>
                         <Text>X{inventoryProducts[i].value.quantity}</Text>
                         <Divider mt={1} mb={1}/>
-                        <Text>{inventoryProducts[i].value.price}TND per {inventoryProducts[i].value.unity}</Text>
+                        <Text>{inventoryProducts[i].value.price}{currency} per {inventoryProducts[i].value.unity}</Text>
                     </View>
 
                     <View style={{paddingHorizontal: 6}}>

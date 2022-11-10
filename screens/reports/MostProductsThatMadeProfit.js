@@ -16,7 +16,7 @@ const MostProductsThatMadeProfit = () => {
 
     const {user} = useAuthentication();
 
-    const {selectedStore} = useContext(GlobalContext)
+    const {selectedStore, currency} = useContext(GlobalContext)
 
     useEffect(() => {
         const dt = new Date()
@@ -89,7 +89,7 @@ const MostProductsThatMadeProfit = () => {
                     elevation: 3,
                 }}>
                     <View style={{padding: 8, backgroundColor: "#F16B44", justifyContent: "center", alignItems: "center", alignSelf: "center", marginBottom: 12}}>
-                        <Text style={{fontWeight: "bold", color: "white"}}>Profit made: {(sortedSellingsProducts[i].value.profit * sortedSellingsProducts[i].value.quantity).toFixed(2)} TND</Text>
+                        <Text style={{fontWeight: "bold", color: "white"}}>Profit made: {(sortedSellingsProducts[i].value.profit * sortedSellingsProducts[i].value.quantity).toFixed(2)} {currency}</Text>
                     </View>
                     <Pressable >
                         <Image source={{uri: sortedSellingsProducts[i].value.image}}
@@ -99,7 +99,7 @@ const MostProductsThatMadeProfit = () => {
                             <Divider mt={1} mb={1}/>
                             <Text>X{sortedSellingsProducts[i].value.quantity}</Text>
                             <Divider mt={1} mb={1}/>
-                            <Text>{sortedSellingsProducts[i].value.price}TND per {sortedSellingsProducts[i].value.unity}</Text>
+                            <Text>{sortedSellingsProducts[i].value.price}{currency} per {sortedSellingsProducts[i].value.unity}</Text>
                         </View>
                     </Pressable>
                 </View>

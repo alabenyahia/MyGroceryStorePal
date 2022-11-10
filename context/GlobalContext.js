@@ -1,14 +1,31 @@
 import React, {useState, useEffect} from 'react'
 import {getDatabase, onValue, ref} from "firebase/database";
 import {useAuthentication} from "../utils/hooks/useAuthentication";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {MYGROCERYSTOREPAL_CURRENCY_KEY} from "../utils/keys";
 
 const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
     const [selectedStore, setSelectedStore] = useState(null)
     const [stores, setStores] = useState([])
+    const [currency, setCurrency] = useState("$")
 
     const {user} = useAuthentication();
+
+    useEffect(() => {
+        async function f() {
+            try {
+                const value = await AsyncStorage.getItem(MYGROCERYSTOREPAL_CURRENCY_KEY)
+                if(value !== null) {
+                    setCurrency(value)
+                }
+            } catch(e) {
+            }
+        }
+    }, []);
+
 
     useEffect(() => {
         if (user) {
@@ -29,7 +46,7 @@ export const GlobalProvider = ({children}) => {
     }, [user]);
 
     return <GlobalContext.Provider
-        value={{selectedStore, setSelectedStore, stores, setStores}}>
+        value={{selectedStore, setSelectedStore, stores, setStores, currency, setCurrency}}>
         {children}
     </GlobalContext.Provider>
 }
