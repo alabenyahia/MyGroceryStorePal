@@ -11,6 +11,7 @@ export const GlobalProvider = ({children}) => {
     const [selectedStore, setSelectedStore] = useState(null)
     const [stores, setStores] = useState([])
     const [currency, setCurrency] = useState("$")
+    const [isLoading, setIsLoading] = useState(false)
 
     const {user} = useAuthentication();
 
@@ -46,7 +47,7 @@ export const GlobalProvider = ({children}) => {
     }, [user]);
 
     return <GlobalContext.Provider
-        value={{selectedStore, setSelectedStore, stores, setStores, currency, setCurrency}}>
+        value={{selectedStore, setSelectedStore, stores, setStores, currency, setCurrency, isLoading, setIsLoading}}>
         {children}
     </GlobalContext.Provider>
 }

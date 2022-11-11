@@ -16,6 +16,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import GlobalContext from "../../context/GlobalContext";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import {getDatabase, onValue, push, ref, set, remove, update} from "firebase/database";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const EditProductFromInventory = ({route, navigation}) => {
     const [name, setName] = useState("");
@@ -29,6 +30,7 @@ const EditProductFromInventory = ({route, navigation}) => {
     const [newCategoryName, setNewCategoryName] = useState("");
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [newCategoryNameError, setNewCategoryNameError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const {id, dt, name: oldName, quantity: oldQuantity, price: oldPrice, unity: oldUnity, category: oldCategory, profit: oldProfit, image} = route.params
 
@@ -97,6 +99,7 @@ const EditProductFromInventory = ({route, navigation}) => {
         }
 
         try {
+            setIsLoading(true)
             const db = getDatabase();
             const updates = {};
             updates[`${user?.uid}/${selectedStore}/inventory/${dt}/products/${id}`] = {
@@ -110,6 +113,7 @@ const EditProductFromInventory = ({route, navigation}) => {
             };
             await update(ref(db), updates);
 
+            setIsLoading(false)
             toast.show({
                 render: () => {
                     return <Box bg="emerald.500" px="4" py="4" rounded="sm" mb={5}>
@@ -234,6 +238,7 @@ const EditProductFromInventory = ({route, navigation}) => {
                         </Modal.Footer>
                     </Modal.Content>
                 </Modal>
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
     );

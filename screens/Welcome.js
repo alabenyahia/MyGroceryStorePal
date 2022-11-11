@@ -5,6 +5,7 @@ import logo from "../assets/logo.png";
 
 
 const Welcome = ({navigation}) => {
+
     return (
         <SafeAreaView style={{backgroundColor: "#F16B44", flex: 1, padding: 16}}>
             <ScrollView>

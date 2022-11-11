@@ -4,9 +4,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from "../../config/firebase";
 import {isEmailValid} from "../../utils/functions";
-import {Image, Pressable, View} from "react-native";
-import facebook from "../../assets/facebook-icon.png";
-import google from "../../assets/google-icon.png";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const SignUp = ({navigation}) => {
@@ -17,6 +15,7 @@ const SignUp = ({navigation}) => {
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
+    const [isLoading, setIsLoading] = useState(false);
 
 
     async function signUp() {
@@ -39,13 +38,14 @@ const SignUp = ({navigation}) => {
             setConfirmPasswordError("passwords don't match")
             return
         }
-
+        setIsLoading(true)
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             navigation.navigate("Login");
         } catch (error) {
             console.log(error.message)
         }
+        setIsLoading(false)
     }
 
     return (
@@ -90,6 +90,7 @@ const SignUp = ({navigation}) => {
 
                 <Button mt={6} onPress={() => signUp()}>SIGN UP</Button>
 
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
     );

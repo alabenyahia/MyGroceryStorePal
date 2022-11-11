@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, Divider, FormControl, Heading, Input, Text, WarningOutlineIcon} from "native-base";
+import {Box, Button, Divider, FormControl, Heading, Input, Text, useToast, WarningOutlineIcon} from "native-base";
 import {Image, Pressable, ScrollView, View} from "react-native";
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from "../../config/firebase";
 import {isEmailValid} from "../../utils/functions";
-import facebook from "../../assets/facebook-icon.png";
-import google from "../../assets/google-icon.png";
+import Spinner from 'react-native-loading-spinner-overlay';
+import { sendPasswordResetEmail } from "firebase/auth";
 
 
 const Login = () => {
@@ -17,6 +17,9 @@ const Login = () => {
     const [passwordError, setPasswordError] = useState("")
 
     const [loginError, setLoginError] = useState("")
+    const [isLoading, setIsLoading] = useState(false);
+
+    const toast = useToast();
 
     auth.useDeviceLanguage();
 
@@ -35,6 +38,8 @@ const Login = () => {
             return
         }
 
+        setIsLoading(true)
+
         try {
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
@@ -47,6 +52,12 @@ const Login = () => {
             }
             console.log(error.message)
         }
+
+        setIsLoading(false)
+    }
+
+    function forgetPassword() {
+        navigation.navigate("ForgetPassword")
     }
 
     return (
@@ -79,12 +90,12 @@ const Login = () => {
                     </FormControl.ErrorMessage>
                 </FormControl>
 
-                <Pressable>
+                <Pressable onPress={() => forgetPassword()}>
                     <Text style={{textAlign: "right", color: "#F16B44", fontWeight: "bold"}}>Forgot Password?</Text>
                 </Pressable>
 
                 <Button mt={6} onPress={() => login()}>LOGIN</Button>
-
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
     );

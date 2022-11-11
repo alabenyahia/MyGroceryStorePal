@@ -49,7 +49,7 @@ const MostProductsThatMadeProfit = () => {
 
     useEffect(() => {
         const copy = [...sellingsProducts]
-        setSortedSellingsProducts(copy.sort((a, b) => (a.value.profit * a.value.quantity ) - (a.value.profit * a.value.quantity)).reverse())
+        setSortedSellingsProducts(copy.sort((a, b) => (a.value.profit * a.value.quantity ) - (b.value.profit * b.value.quantity)).reverse())
     }, [sellingsProducts]);
 
 

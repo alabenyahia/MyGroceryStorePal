@@ -1,29 +1,24 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Pressable, ScrollView, Text, View} from "react-native";
 import {
-    Alert, Box,
-    Button, Collapse,
+    Box,
+    Button,
     Divider,
-    FormControl,
-    HStack,
-    Icon,
     Input,
     Modal,
-    Select, useToast,
-    VStack,
-    WarningOutlineIcon
+    useToast,
+
 } from "native-base";
-import {AntDesign} from "@expo/vector-icons";
 import {SafeAreaView} from "react-native-safe-area-context";
 import GlobalContext from "../../context/GlobalContext";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import {getDatabase, onValue, push, ref, set, remove, update} from "firebase/database";
-import * as ImagePicker from "expo-image-picker";
-import {getDownloadURL, getStorage, ref as firebaseStorageRef, uploadBytes} from "firebase/storage";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const EditProductFromSellings = ({route, navigation}) => {
     const [quantity, setQuantity] = useState("");
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const {id, dt, name: oldName, quantity: oldQuantity, price: oldPrice, unity: oldUnity, category: oldCategory, image, maxQuantity} = route.params
 
@@ -51,6 +46,7 @@ const EditProductFromSellings = ({route, navigation}) => {
         }
 
         try {
+            setIsLoading(true)
             const db = getDatabase();
             let updates = {};
             if (parseInt(quantity) > maxQuantity) {
@@ -76,6 +72,7 @@ const EditProductFromSellings = ({route, navigation}) => {
                 }
             }
             await update(ref(db), updates);
+            setIsLoading(false)
 
             toast.show({
                 render: () => {
@@ -127,6 +124,7 @@ const EditProductFromSellings = ({route, navigation}) => {
                         </Modal.Footer>
                     </Modal.Content>
                 </Modal>
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
     );

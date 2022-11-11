@@ -5,6 +5,7 @@ import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import {getDatabase, ref, onValue, update} from "firebase/database";
 import GlobalContext from "../../context/GlobalContext";
 import {SafeAreaView} from "react-native-safe-area-context";
+import Spinner from "react-native-loading-spinner-overlay";
 
 
 const AddProductToSellings = ({route}) => {
@@ -15,6 +16,7 @@ const AddProductToSellings = ({route}) => {
     const [inventoryProducts, setInventoryProducts] = useState([])
     const [dateText, setDateText] = useState("")
     const [quantities, setQuantities] = useState({})
+    const [isLoading, setIsLoading] = useState(false);
 
     const {date} = route.params
 
@@ -210,6 +212,7 @@ const AddProductToSellings = ({route}) => {
         }
         const db = getDatabase();
 
+        setIsLoading(true)
         getOnlyQuantityNotZero().forEach(product => {
             const updates = {};
 
@@ -220,6 +223,8 @@ const AddProductToSellings = ({route}) => {
 
             update(ref(db), updates);
         })
+
+         setIsLoading(false)
 
          toast.show({
              render: () => {
@@ -238,6 +243,8 @@ const AddProductToSellings = ({route}) => {
                 <View style={{paddingHorizontal: 16}}>
                     <Button onPress={() => addProducts()}>Add</Button>
                 </View>
+
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
 

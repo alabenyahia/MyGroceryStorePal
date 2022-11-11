@@ -11,6 +11,7 @@ import {useAuthentication} from "../../utils/hooks/useAuthentication";
 import {getDatabase, ref, set, push, onValue} from "firebase/database";
 import {getStorage, ref as firebaseStorageRef, uploadBytes, getDownloadURL} from "firebase/storage";
 import GlobalContext from "../../context/GlobalContext";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const AddProductToInventory = ({route}) => {
@@ -25,6 +26,7 @@ const AddProductToInventory = ({route}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
     const [newCategoryNameError, setNewCategoryNameError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const {date} = route.params
@@ -109,6 +111,7 @@ const AddProductToInventory = ({route}) => {
             const result = await uploadBytes(reference, blobFile)
             const imgUrl = await getDownloadURL(result.ref)
 
+            setIsLoading(true)
             const db = getDatabase();
             const productsRef = ref(db, `${user?.uid}/${selectedStore}/inventory/${date}/products`);
             const newProductRef = push(productsRef);
@@ -121,6 +124,8 @@ const AddProductToInventory = ({route}) => {
                 category: category,
                 image: imgUrl
             });
+
+            setIsLoading(false)
 
             toast.show({
                 render: () => {
@@ -239,7 +244,7 @@ const AddProductToInventory = ({route}) => {
                 </View>
 
                 <Button onPress={() => addProduct()}>Add</Button>
-
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
     );

@@ -4,7 +4,6 @@ import {auth} from "../../config/firebase";
 
 export function useAuthentication() {
     const [user, setUser] = useState(null);
-
     useEffect(() => {
         return onAuthStateChanged(auth, (user) => {
             if (user) {

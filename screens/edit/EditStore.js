@@ -1,12 +1,13 @@
 import React, {useLayoutEffect, useState, useContext} from 'react';
 import {Pressable, ScrollView, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Button, Divider, FormControl, Icon, Input, Text, WarningOutlineIcon} from "native-base";
+import {Box, Button, Divider, FormControl, Icon, Input, Text, useToast, WarningOutlineIcon} from "native-base";
 import ColorPicker from "react-native-wheel-color-picker";
 import {AntDesign} from "@expo/vector-icons";
 import GlobalContext from "../../context/GlobalContext";
 import { getDatabase, ref, child, push, update } from "firebase/database";
 import {useAuthentication} from "../../utils/hooks/useAuthentication";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const EditStore = ({route, navigation}) => {
     const {id, oldName} = route.params;
@@ -14,9 +15,12 @@ const EditStore = ({route, navigation}) => {
     const [storeColor, setStoreColor] = useState("")
     const [newStoreNameError, setNewStoreNameError] = useState("")
     const [successMsg, setSuccessMsg] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const {selectedStore} = useContext(GlobalContext)
     const {user} = useAuthentication();
+
+    const toast = useToast();
 
     useLayoutEffect(() => {
         setSuccessMsg("")
@@ -24,12 +28,13 @@ const EditStore = ({route, navigation}) => {
         setStoreName(oldName)
     }, [])
 
-    function editStore() {
+    async function editStore() {
         setSuccessMsg("")
         if (storeName.length === 0) {
             setNewStoreNameError("Store name shouldn't be empty")
             return
         }
+        setIsLoading(true)
         const db = getDatabase();
         let newStoreData
         if (storeColor) {
@@ -46,8 +51,15 @@ const EditStore = ({route, navigation}) => {
 
         const updates = {};
         updates[user?.uid + '/stores/' + id] = newStoreData;
-        update(ref(db), updates);
-        setSuccessMsg("Store edited successfully!")
+        await update(ref(db), updates);
+        setIsLoading(false)
+        toast.show({
+            render: () => {
+                return <Box bg="emerald.500" px="4" py="4" rounded="sm" mb={5}>
+                    Store updated successfully!
+                </Box>;
+            }
+        });
         setStoreName("")
     }
 
@@ -82,6 +94,7 @@ const EditStore = ({route, navigation}) => {
                 <Divider mt={6} mb={6}/>
 
                 <Button mx={4} onPress={() => editStore()}>Edit</Button>
+                <Spinner visible={isLoading}/>
             </ScrollView>
         </SafeAreaView>
     );

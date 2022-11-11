@@ -21,6 +21,8 @@ import LeastSoldProducts from "../screens/reports/LeastSoldProducts";
 import MostProductsThatMadeProfit from "../screens/reports/MostProductsThatMadeProfit";
 import LeastProductsThatMadeProfit from "../screens/reports/LeastProductsThatMadeProfit";
 import Profits from "../screens/reports/Profits";
+import ForgetPassword from "../screens/auth/ForgetPassword";
+import About from "../screens/About";
 
 const Drawer = createDrawerNavigator();
 
@@ -37,6 +39,7 @@ export default function UserDrawer() {
                 <Drawer.Screen name="Stores" component={Stores}/>
                 <Drawer.Screen name="Tutorial" component={Tutorial}/>
                 <Drawer.Screen name="Settings" component={Settings}/>
+                <Drawer.Screen name="About" component={About}/>
 
                 <Drawer.Screen
                     name="EditStore"
@@ -125,6 +128,15 @@ export default function UserDrawer() {
                     options={{
                         drawerItemStyle: { display: "none" },
                         title: "Profits",
+                    }}
+                />
+
+                <Drawer.Screen
+                    name="ForgetPassword"
+                    component={ForgetPassword}
+                    options={{
+                        drawerItemStyle: { display: "none" },
+                        title: "Forget Password",
                     }}
                 />
 
